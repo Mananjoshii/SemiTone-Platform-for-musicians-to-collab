@@ -15,6 +15,40 @@
       .card-img-top {
         height: 200px;
         object-fit: cover;
+        width: 100%;
+      }
+      .card {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      .card:hover {
+        transform: translateY(-10px);
+      }
+      .card-body {
+        padding: 15px;
+      }
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+      .card-text {
+        font-size: 1rem;
+        color: #555;
+      }
+      .btn-primary {
+        background-color: #1e3d58;
+        border-color: #1e3d58;
+        transition: background-color 0.3s ease;
+      }
+      .btn-primary:hover {
+        background-color: #153f56;
+        border-color: #153f56;
+      }
+      .container {
+        max-width: 1200px;
       }
     </style>
   </head>
@@ -40,7 +74,7 @@
         <% artists.forEach(artist => { %>
           <div class="col-md-4 mb-4">
             <div class="card">
-              <img src="/uploads/images/<%= artist.image || 'default-artist.jpg' %>" class="card-img-top" alt="<%= artist.name %>">
+              <img src="/uploads/images/<%= artist.profile_picture || 'default-artist.jpg' %>" class="card-img-top" alt="<%= artist.name %>">
               <div class="card-body">
                 <h5 class="card-title"><%= artist.name %></h5>
                 <p class="card-text"><strong>Genre:</strong> <%= artist.genre %></p>
@@ -50,7 +84,7 @@
             </div>
           </div>
         <% }); %>
-      </div>
+      </div>  
     </div>
 
     <!-- Footer -->

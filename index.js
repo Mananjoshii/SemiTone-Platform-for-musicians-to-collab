@@ -85,13 +85,12 @@ const upload = multer({ storage });
 
 
 // App Configuration
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-
 // Authentication Middleware
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated() && req.user) {
@@ -185,70 +184,72 @@ app.post("/login", passport.authenticate("local", { successRedirect: "/", failur
 
 app.get("/register", (req, res) => res.render("register"));
 
-app.post("/register", upload.fields([
-    { name: "profile_picture", maxCount: 1 },
-    { name: "video", maxCount: 1 },
-    { name: "audio", maxCount: 1 },
-]), async (req, res) => {
-    const {
-        username: email,
-        password,
-        name,
-        role,
-        description,
-        instrument,
-    } = req.body;
-    const profile_picture = req.files?.profile_picture?.[0]?.filename || null;
-    const video = req.files?.video?.[0]?.filename || null;
-    const audio = req.files?.audio?.[0]?.filename || null;
+app.post(
+    "/register",
+    upload.fields([
+        { name: "profile_picture", maxCount: 1 },
+        { name: "video", maxCount: 1 },
+        { name: "audio", maxCount: 1 },
+    ]),
+    async (req, res) => {
+        const { email, password, name, role, description, instrument } = req.body;
 
-    try {
-        const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+        // Check for required fields
+        if (!email || !password || !name || !role || !instrument) {
+            return res.status(400).send("All fields are required.");
+        }
 
-        if (checkResult.rows.length > 0) {
-            res.redirect("/login");
-        } else {
-            bcrypt.hash(password, saltRounds, async (err, hash) => {
+        const profile_picture = req.files?.profile_picture?.[0]?.filename || null;
+        const video = req.files?.video?.[0]?.filename || null;
+        const audio = req.files?.audio?.[0]?.filename || null;
+
+        try {
+            // Check if the email already exists
+            const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+
+            if (checkResult.rows.length > 0) {
+                return res.redirect("/login");  // If email exists, redirect to login
+            }
+
+            // Hash the password using bcrypt
+            const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+            // Insert user into the database
+            const result = await db.query(
+                `INSERT INTO users 
+                (email, password, name, role, description, profile_picture, video, audio, instrument) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+                RETURNING *`,
+                [
+                    email,
+                    hashedPassword,
+                    name,
+                    role,
+                    description,
+                    profile_picture,
+                    video,
+                    audio,
+                    instrument,
+                ]
+            );
+
+            const user = result.rows[0];
+
+            // Log the user in and redirect to profile
+            req.login(user, (err) => {
                 if (err) {
-                    console.error("Error hashing password:", err);
-                    res.status(500).send("Internal Server Error");
+                    console.error("Error logging in user:", err);
+                    return res.status(500).send("Internal Server Error");
                 } else {
-                    const result = await db.query(
-                        `INSERT INTO users 
-                        (email, password, name, role, description, profile_picture, video, audio, instrument) 
-                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
-                        RETURNING *`,
-                        [
-                            email,
-                            hash,
-                            name,
-                            role,
-                            description,
-                            profile_picture,
-                            video,
-                            audio,
-                            instrument,
-                        ]
-                    );
-
-                    const user = result.rows[0];
-                    req.login(user, (err) => {
-                        if (err) {
-                            console.error("Error logging in user:", err);
-                            res.status(500).send("Internal Server Error");
-                        } else {
-                            res.redirect("/profile");
-                        }
-                    });
+                    res.redirect("/profile_musician");
                 }
             });
+        } catch (err) {
+            console.error("Error registering user:", err);
+            res.status(500).send("Internal Server Error");
         }
-    } catch (err) {
-        console.error("Error registering user:", err);
-        res.status(500).send("Internal Server Error");
     }
-});
-
+);
 
 app.get("/profile", isAuthenticated, (req, res) => {
     db.query("SELECT * FROM users WHERE id = $1", [req.user.id], (err, result) => {
