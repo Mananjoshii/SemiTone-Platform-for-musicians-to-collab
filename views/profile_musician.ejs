@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>User Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <style>
+    .img-thumbnail {
+      border-radius: 50px;
+    }
+
+    .dashboard-container {
+      padding: 20px;
+    }
+
+    .profile-section img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+
+    .btn-connect {
+      margin-top: 5px;
+      font-size: 0.9rem;
+    }
+
+    .card {
+      margin-bottom: 20px;
+      border-radius: 20px;
+    }
+
+    .professional.details {
+      list-style-type: none;
+      padding: 0;
+      margin: 20px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .professional.details li {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .professional.details li:last-child {
+      border-bottom: none;
+    }
+
+    .professional.details li strong {
+      color: #0077cc;
+      font-weight: bold;
+    }
+
+    .professional.details li:hover {
+      background-color: #eef6ff;
+      cursor: pointer;
+    }
+
+    .list-group {
+      list-style-type: none;
+      padding: 0;
+      margin: 20px 0;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .list-group-item {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .list-group-item:last-child {
+      border-bottom: none;
+    }
+
+    .list-group-item strong {
+      color: #0077cc;
+      font-weight: bold;
+    }
+
+    .list-group-item:hover {
+      background-color: #eef6ff;
+      cursor: pointer;
+    }
+
+    .connections-section {
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+
+    .connections-section h2,
+    .connections-section h3 {
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 8px 0;
+      padding: 8px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    button {
+      padding: 5px 10px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header Section -->
+  <header class="p-3 mb-3 border-bottom" style="background-color: black; color: white;">
+    <div class="container">
+      <span class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+          <img src="/SEMITONE_LOGO.gif" alt="MusicHub Logo" width="200">
+        </a>
+      </span>
+      <a href="/logout" class="btn btn-danger" style="margin-left: 93%;">Logout</a>
+    </div>
+  </header>
+
+  <!-- Dashboard Section -->
+  <div class="dashboard-container container">
+    <div class="row">
+      <!-- Profile Section -->
+      <div class="col-lg-3 col-md-4 mb-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <img src="/uploads/images/<%= user.profile_picture %>" alt="Profile Picture" class="img-thumbnail mb-3">
+            <h5 class="card-title"><%= user.name %></h5>
+            <p class="text-muted mb-3">Musician | Guitarist</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Section -->
+      <div class="col-lg-6 col-md-8">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">User Information:</h5>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><strong>Email:</strong> <%= user.email %></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Professional Details:</h5>
+            <ul class="professional details">
+              <%= user.description %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="container my-4">
+      <h2 class="mb-4">User Posts</h2>
+      <div class="row g-3">
+        <!-- Post Template -->
+        <div class="col-md-4">
+          <div class="card">
+            <video src="/uploads/videos/<%=user.video%>" controls></video>
+            <div class="card-body">
+              <h5 class="card-title">Sample Title</h5>
+              <p class="card-text">Sample Description</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Connections Section -->
+    <div class="connections-section">
+      <h2>Connections</h2>
+      <div class="friend-requests">
+        <h3>Friend Requests</h3>
+        <ul id="friend-requests-list">
+          <!-- Dynamically populated -->
+        </ul>
+      </div>
+      <div class="friends-list">
+        <h3>Your Friends</h3>
+        <ul id="friends-list">
+          <!-- Dynamically populated -->
+        </ul>
+      </div>
+      <div class="add-friend">
+        <h3>Add a Friend</h3>
+        <input type="text" id="friend-username" placeholder="Enter username" />
+        <button onclick="sendFriendRequest()">Send Request</button>
+      </div>
+      <h3>Friend Recommendations</h3>
+      <ul id="friend-recommendations-list">
+        <!-- Dynamically populated -->
+      </ul>
+    </div>
+
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+      <div class="col-md-4 d-flex align-items-center">
+        <span class="mb-3 mb-md-0 text-body-secondary">©️ 2024 Company, Inc</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    let users = [];
+
+    let currentUser = ""; // dynamically populated with the logged-in user's username
+
+    function getUser(username) {
+      return users.find((u) => u.username === username);
+    }
+
+    function getFriendRecommendations(username) {
+      const user = getUser(username);
+      const recommendations = {};
+
+      user.connections.forEach((friend) => {
+        const friendObj = getUser(friend);
+        friendObj.connections.forEach((mutual) => {
+          if (mutual !== username && !user.connections.includes(mutual)) {
+            recommendations[mutual] = (recommendations[mutual] || 0) + 1;
+          }
+        });
+      });
+
+      return Object.entries(recommendations)
+        .sort((a, b) => b[1] - a[1])
+        .map(([user, count]) => ({ username: user, mutualConnections: count }));
+    }
+
+    function displayFriendRecommendations(username) {
+      const recommendations = getFriendRecommendations(username);
+      const list = document.getElementById("friend-recommendations-list");
+      list.innerHTML = "";
+
+      if (recommendations.length === 0) {
+        list.innerHTML = "<li>No recommendations available.</li>";
+        return;
+      }
+
+      recommendations.forEach((recommendation) => {
+        const li = document.createElement("li");
+        li.textContent = `${recommendation.username} (${recommendation.mutualConnections} mutual connection(s))`;
+
+        const addButton = document.createElement("button");
+        addButton.textContent = "Add Friend";
+        addButton.onclick = () => sendFriendRequest(recommendation.username);
+
+        li.appendChild(addButton);
+        list.appendChild(li);
+      });
+    }
+
+    function sendFriendRequest(username) {
+      const user = getUser(currentUser);
+      const target = getUser(username);
+
+      if (target) {
+        alert(`Friend request sent to ${username}`);
+      } else {
+        alert("User not found!");
+      }
+    }
+
+    displayFriendRecommendations(currentUser);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
