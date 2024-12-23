@@ -2,33 +2,44 @@
 
 <body>
   <!-- Header -->
-  <header class="p-3">
+  <header class="p-3" style="background-color: #000; color: #fff;">
     <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-between">
-        <a href="/" class="navbar-brand">
-          <img src="SEMITONE_LOGO.gif" alt="MusicHub Logo" width="200px">
-        </a>
-        <ul class="nav me-auto mb-2 justify-content-start">
-          <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">Discover</a></li>
-          <li><a href="/about" class="nav-link px-2 text-white">About</a></li>
-        </ul>
-        <form class="col-auto me-3" role="search">
-          <input type="search" class="form-control text-bg-dark" placeholder="Search for artists, bands..."
-            aria-label="Search">
-        </form>
-        <div>
-          <a href="/register" role="button">
-            <button type="button" class="btn btn-primary">Sign Up for free</button>
-          </a>
-          <a href="/login" role="button">
-            <button type="button" class="btn btn-outline-light me-2">Login</button>
-          </a>
+        <div class="d-flex flex-wrap align-items-center justify-content-between">
+            <!-- Logo -->
+            <a href="/" class="navbar-brand">
+                <img src="SEMITONE_LOGO.gif" alt="MusicHub Logo" width="200px">
+            </a>
+            
+            <!-- Navigation Links -->
+            <ul class="nav me-auto mb-2 justify-content-start">
+                <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
+                <li><a href="#" class="nav-link px-2 text-white">Discover</a></li>
+                <li><a href="/about" class="nav-link px-2 text-white">About</a></li>
+            </ul>
+            
+            <!-- Search Bar -->
+            <form class="col-auto me-3" role="search">
+                <input type="search" class="form-control text-bg-dark" placeholder="Search for artists, bands..."
+                    aria-label="Search">
+            </form>
+            
+            <!-- Authentication Buttons -->
+            <div>
+                <% if (user) { %>
+                    <!-- If Logged In -->
+                    <a href="/profile" class="btn btn-outline-light">Profile</a>
+                    <a href="/logout" class="btn btn-outline-danger ms-2">Logout</a>
+                <% } else { %>
+                    <!-- If Not Logged In -->
+                    <a href="/register" class="btn btn-primary">Sign Up for free</a>
+                    <a href="/login" class="btn btn-outline-light ms-2">Login</a>
+                <% } %>
+            </div>
         </div>
-      </div>
     </div>
-  </header>
+</header>
+
 
   <!-- Hero Section -->
   <section class="hero-section text-center">

@@ -41,15 +41,14 @@
         <h1>Live Events</h1>
 
         <!-- Add Event Button (Visible to Authorized Users Only) -->
-        <% if (user && user.isAuthorized) { %>
+        <% if (user) { %>
             <div class="mb-4">
                 <a href="/add-event" class="btn btn-success">Add Event</a>
             </div>
-        <% } else if (!user) { %>
-            <p>You need to log in to add events.</p>
         <% } else { %>
-            <p>You do not have the permissions to add events.</p>
+            <p class="text-muted">You must be logged in to add an event.</p>
         <% } %>
+        
         
 
         <!-- Dynamic Cards Section -->
