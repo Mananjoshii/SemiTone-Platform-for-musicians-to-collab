@@ -26,27 +26,9 @@
           <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
             <img src="/SEMITONE_LOGO.gif" alt="MusicHub Logo" width="120">
           </a>
-          <!-- <ul class="nav">
-            <li><a href="#" class="nav-link px-2 text-white">Overview</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">Bands</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">Network</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">Post</a></li>
-          </ul> -->
           <form class="col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
             <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
           </form>
-          <!-- <div class="dropdown text-end">
-            <a href="#" class="d-block text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="https://github.com/mdo.png" alt="User Profile" width="32" height="32" class="rounded-circle">
-            </a>
-            <ul class="dropdown-menu text-small">
-              <li><a class="dropdown-item" href="#">New project...</a></li>
-              <li><a class="dropdown-item" href="#">Settings</a></li>
-              <li><a class="dropdown-item" href="#">Profile</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Sign out</a></li>
-            </ul>
-          </div> -->
         </div>
       </div>
     </header>
@@ -58,7 +40,7 @@
         <% artists.forEach(artist => { %>
           <div class="col-md-4 mb-4">
             <div class="card">
-              <img src="<%= artist.image || 'default-artist.jpg' %>" class="card-img-top" alt="<%= artist.name %>">
+              <img src="/uploads/images/<%= artist.image || 'default-artist.jpg' %>" class="card-img-top" alt="<%= artist.name %>">
               <div class="card-body">
                 <h5 class="card-title"><%= artist.name %></h5>
                 <p class="card-text"><strong>Genre:</strong> <%= artist.genre %></p>

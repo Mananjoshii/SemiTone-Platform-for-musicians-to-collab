@@ -57,7 +57,7 @@
                 <% events.forEach(event => { %>
                 <div class="col-md-4">
                     <div class="card h-100">
-                        <img src="<%= event.image_url %>" class="card-img-top" alt="Event Image">
+                        <img src="/uploads/images/<%= event.image %>" class="card-img-top" alt="Event Image">
                         <div class="card-body">
                             <h5 class="card-title"><%= event.title %></h5>
                             <p class="card-text"><%= event.description %></p>

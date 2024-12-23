@@ -23,9 +23,11 @@
             
               <!-- Email -->
               <div class="form-floating mb-3">
-                <input type="email" class="form-control" id="floatingInput" name="username" placeholder="name@example.com" required>
+                <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com" required pattern="^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+
                 <label for="floatingInput">Email address</label>
               </div>
+              
             
               <!-- Password -->
               <div class="form-floating mb-3">

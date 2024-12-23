@@ -71,7 +71,10 @@ app.use((req, res, next) => {
 // File Upload Configuration
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "uploads/images/");
+        const destinationPath = file.fieldname === "video" ? "uploads/videos/"
+            : file.fieldname === "audio" ? "uploads/audio/"
+                : "uploads/images/";
+        cb(null, destinationPath); // Set folder based on field name
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -119,12 +122,18 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => done(null, user.id));
-passport.deserializeUser((id, done) =>
-    db.query("SELECT * FROM users WHERE id = $1", [id], (err, result) => {
-        if (err) return done(err);
-        done(null, result.rows[0]);
-    })
-);
+passport.deserializeUser(async (id, done) => {
+    try {
+        const result = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+        if (result.rows.length > 0) {
+            done(null, result.rows[0]); // Pass the user object to the request
+        } else {
+            done(new Error('User not found'));
+        }
+    } catch (err) {
+        done(err);
+    }
+});
 
 // Routes
 app.get("/", (req, res) => {
@@ -176,35 +185,70 @@ app.post("/login", passport.authenticate("local", { successRedirect: "/", failur
 
 app.get("/register", (req, res) => res.render("register"));
 
-app.post(
-    "/register",
-    upload.fields([
-        { name: "profile_picture", maxCount: 1 },
-        { name: "video", maxCount: 1 },
-        { name: "audio", maxCount: 1 },
-    ]),
-    async (req, res) => {
-        const { email, password, name, role, description, instrument } = req.body;
-        const profile_picture = req.files?.profile_picture?.[0]?.filename || null;
-        const video = req.files?.video?.[0]?.filename || null;
-        const audio = req.files?.audio?.[0]?.filename || null;
+app.post("/register", upload.fields([
+    { name: "profile_picture", maxCount: 1 },
+    { name: "video", maxCount: 1 },
+    { name: "audio", maxCount: 1 },
+]), async (req, res) => {
+    const {
+        username: email,
+        password,
+        name,
+        role,
+        description,
+        instrument,
+    } = req.body;
+    const profile_picture = req.files?.profile_picture?.[0]?.filename || null;
+    const video = req.files?.video?.[0]?.filename || null;
+    const audio = req.files?.audio?.[0]?.filename || null;
 
-        try {
-            const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
-            if (result.rows.length > 0) return res.redirect("/login");
+    try {
+        const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
 
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
-            await db.query(
-                "INSERT INTO users (email, password, name, role, description, profile_picture, video, audio, instrument) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
-                [email, hashedPassword, name, role, description, profile_picture, video, audio, instrument]
-            );
-            res.redirect("/profile");
-        } catch (err) {
-            console.error("Error registering user:", err);
-            res.status(500).send("Internal Server Error");
+        if (checkResult.rows.length > 0) {
+            res.redirect("/login");
+        } else {
+            bcrypt.hash(password, saltRounds, async (err, hash) => {
+                if (err) {
+                    console.error("Error hashing password:", err);
+                    res.status(500).send("Internal Server Error");
+                } else {
+                    const result = await db.query(
+                        `INSERT INTO users 
+                        (email, password, name, role, description, profile_picture, video, audio, instrument) 
+                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+                        RETURNING *`,
+                        [
+                            email,
+                            hash,
+                            name,
+                            role,
+                            description,
+                            profile_picture,
+                            video,
+                            audio,
+                            instrument,
+                        ]
+                    );
+
+                    const user = result.rows[0];
+                    req.login(user, (err) => {
+                        if (err) {
+                            console.error("Error logging in user:", err);
+                            res.status(500).send("Internal Server Error");
+                        } else {
+                            res.redirect("/profile");
+                        }
+                    });
+                }
+            });
         }
+    } catch (err) {
+        console.error("Error registering user:", err);
+        res.status(500).send("Internal Server Error");
     }
-);
+});
+
 
 app.get("/profile", isAuthenticated, (req, res) => {
     db.query("SELECT * FROM users WHERE id = $1", [req.user.id], (err, result) => {
