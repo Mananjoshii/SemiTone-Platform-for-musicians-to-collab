@@ -72,6 +72,8 @@
     <!-- Main Content -->
     <div class="container">
       <h2 class="text-center my-4">Artists</h2>
+    
+      <!-- Artist Cards -->
       <div class="row">
         <% artists.forEach(artist => { %>
           <div class="col-md-4 mb-4">
@@ -79,15 +81,18 @@
               <img src="/uploads/images/<%= artist.profile_picture || 'default-artist.jpg' %>" class="card-img-top" alt="<%= artist.name %>">
               <div class="card-body">
                 <h5 class="card-title"><%= artist.name %></h5>
-                <p class="card-text"><strong>Genre:</strong> <%= artist.genre %></p>
-                <p class="card-text"><%= artist.bio %></p>
-                <a href="<%= artist.profileLink %>" class="btn btn-primary">View Profile</a>
+                <p class="card-text"><%= artist.description || 'No description available.' %></p>
+                <a href="/profile/<%= artist.id %>" class="btn btn-primary">View Profile</a>
+
+                <!-- <button class="btn btn-primary view-profile-btn" data-id="/profile_musician/<%= artist.id %>">View Profile</button> -->
               </div>
             </div>
           </div>
         <% }); %>
-      </div>  
-    </div>
+      </div>
+    
+      
+    
 
     <!-- Footer -->
     <footer class="bg-dark text-white py-4 mt-5">
@@ -101,6 +106,43 @@
       </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76A2Fq5ROQ05NvGx6GmzQ10uDhtL0uVxCEN7aOg1Fu+aVb5HnQ1gHftJo2tFaFb" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76A2Fq5ROQ05NvGx6GmzQ10uDhtL0uVxCEN7aOg1Fu+aVb5HnQ1gHftJo2tFaFb" crossorigin="anonymous">
+      
+  document.addEventListener("DOMContentLoaded", () => {
+    const profileSection = document.querySelector(".profile-section");
+
+    document.querySelectorAll(".view-profile-btn").forEach(button => {
+      button.addEventListener("click", async (event) => {
+        const artistId = event.target.getAttribute("data-id");
+
+        try {
+          const response = await fetch(`/api/artist/${artistId}`);
+          if (!response.ok) throw new Error("Failed to fetch artist details");
+
+          const artist = await response.json();
+          updateProfileSection(artist);
+        } catch (error) {
+          console.error("Error fetching artist profile:", error);
+          alert("Unable to load artist profile. Please try again.");
+        }
+      });
+    });
+
+    function updateProfileSection(artist) {
+      profileSection.innerHTML = `
+        <div class="card text-center">
+          <div class="card-body">
+            <img src="/uploads/images/${artist.profile_picture || 'default-artist.jpg'}" alt="${artist.name}" class="img-thumbnail mb-3">
+            <h5 class="card-title">${artist.name}</h5>
+            <p class="text-muted mb-3">${artist.description || 'No description available.'}</p>
+            <p>${artist.bio || 'No additional information available.'}</p>
+          </div>
+        </div>
+      `;
+    }
+  });
+</script>
+
+    </script>
   </body>
 </html>

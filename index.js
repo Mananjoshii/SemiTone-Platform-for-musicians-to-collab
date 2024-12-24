@@ -190,12 +190,68 @@ app.get("/search", async (req, res) => {
 
 
 
-app.get("/artists", (req, res) => {
+app.get("/artists",(req, res) => {
     db.query("SELECT * FROM artists", (err, result) => {
-        if (err) return res.status(500).send("Error fetching artists");
+        if (err) {
+            console.error("Error fetching artists:", err);
+            return res.status(500).send("Error fetching artists");
+        }
         res.render("artists", { artists: result.rows });
     });
 });
+
+
+// // Route for artist profile
+// app.get("/artist/:id", (req, res) => {
+//     const artistId = req.params.id;
+
+//     db.query("SELECT * FROM artists WHERE id = $1", [artistId], (err, result) => {
+//         if (err) return res.status(500).send("Error fetching artist profile");
+
+//         if (result.rows.length === 0) {
+//             return res.status(404).send("Artist not found");
+//         }
+
+//         res.render("artist-profile", { artist: result.rows[0] });
+//     });
+// });
+
+app.get("/profile/:id", (req, res) => {
+    const artistId = req.params.id;
+
+    db.query("SELECT * FROM artists WHERE id = $1", [artistId], (err, result) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        if (result.rows.length === 0) {
+            console.error("Artist not found in the database.");
+            return res.status(404).send("Artist not found");
+        }
+
+        // Pass the artist data as `user` to match the template
+        res.render("profile_musician", { user: result.rows[0] });
+    });
+});
+
+
+
+
+app.get("/api/artist/:id", (req, res) => {
+    const artistId = req.params.id;
+
+    db.query("SELECT * FROM artists WHERE id = $1", [artistId], (err, result) => {
+        if (err) return res.status(500).json({ error: "Error fetching artist details" });
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Artist not found" });
+        }
+
+        res.json(result.rows[0]);
+    });
+});
+
 
 app.get("/bands", (req, res) => {
     db.query("SELECT * FROM bands", (err, result) => {
@@ -213,6 +269,9 @@ app.get("/events", isAuthenticated, (req, res) => {
 
 app.get("/add-event", isAuthenticated, (req, res) => {
     res.render("add-event", { user: req.user });
+});
+app.get("/about",  (req, res) => {
+    res.render("about");
 });
 
 app.post("/add-event", isAuthenticated, upload.single("image"), (req, res) => {
