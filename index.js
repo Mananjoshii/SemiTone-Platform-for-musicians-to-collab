@@ -187,6 +187,30 @@ app.get("/search", async (req, res) => {
 });
 
 
+// app.get("/about", (req, res) => {
+//     // Assuming you're using a session to store the logged-in user
+//     const user = req.session.user; // Replace this with your user retrieval logic
+
+//     if (!user) {
+//         return res.redirect("/login"); // Redirect to login if no user is logged in
+//     }
+
+//     // Fetch user details from the database if needed
+//     db.query("SELECT * FROM users WHERE id = $1", [user.id], (err, result) => {
+//         if (err) {
+//             console.error("Database error:", err);
+//             return res.status(500).send("Internal Server Error");
+//         }
+
+//         if (result.rows.length === 0) {
+//             console.error("User not found in the database.");
+//             return res.status(404).send("User not found");
+//         }
+
+//         // Pass user details to the EJS template
+//         res.render("about", { user: result.rows[0] });
+//     });
+// });
 
 
 
