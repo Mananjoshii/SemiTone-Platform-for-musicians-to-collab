@@ -136,7 +136,29 @@ passport.deserializeUser(async (id, done) => {
 
 // Routes
 app.get("/", (req, res) => {
-    res.render("home", { user: req.session.user || null });
+    // Ensure the user is logged in
+    if (!req.user || !req.user.id) {
+        return res.redirect("/login"); // Redirect to login if no user session
+    }
+
+    // Fetch user profile from database
+    db.query("SELECT * FROM users WHERE id = $1", [req.user.id], (err, result) => {
+        if (err) {
+            console.error("Error fetching profile:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+
+        // Render the home view with user data
+        const user = result.rows[0];
+        res.render("home", { user });
+    });
+});
+
+app.get("/profile", isAuthenticated, (req, res) => {
+    db.query("SELECT * FROM users WHERE id = $1", [req.user.id], (err, result) => {
+        if (err) return res.status(500).send("Error fetching profile");
+        res.render("profile_musician", { user: result.rows[0] });
+    });
 });
 
 
@@ -251,12 +273,7 @@ app.post(
     }
 );
 
-app.get("/profile", isAuthenticated, (req, res) => {
-    db.query("SELECT * FROM users WHERE id = $1", [req.user.id], (err, result) => {
-        if (err) return res.status(500).send("Error fetching profile");
-        res.render("profile", { user: result.rows[0] });
-    });
-});
+
 
 app.get("/logout", (req, res) => {
     req.logout((err) => {
