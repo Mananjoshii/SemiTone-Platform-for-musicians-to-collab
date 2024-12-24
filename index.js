@@ -160,6 +160,34 @@ app.get("/profile", isAuthenticated, (req, res) => {
         res.render("profile_musician", { user: result.rows[0] });
     });
 });
+app.get("/search", async (req, res) => {
+    const { query } = req.query;
+    try {
+        if (!query) {
+            return res.status(400).send("Search query is required.");
+        }
+
+        const sqlQuery = `
+            SELECT id, name, profile_picture, description 
+            FROM users 
+            WHERE role = 'musician' AND name ILIKE $1
+        `;
+
+        const result = await db.query(sqlQuery, [`%${query}%`]);
+
+        if (result.rows.length === 0) {
+            return res.render("search-results", { profiles: [], message: "No musicians found matching your query." });
+        }
+
+        res.render("search-results", { profiles: result.rows, message: null });
+    } catch (err) {
+        console.error("Search route error:", err); // Log the error details
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
+
 
 
 app.get("/artists", (req, res) => {

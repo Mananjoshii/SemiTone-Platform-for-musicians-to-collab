@@ -60,9 +60,11 @@
           <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
             <img src="/SEMITONE_LOGO.gif" alt="MusicHub Logo" width="120">
           </a>
-          <form class="col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-            <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-          </form>
+          <form action="/search" method="GET" class="col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+            <input type="search" name="query" class="form-control" placeholder="Search..." aria-label="Search" required>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        
         </div>
       </div>
     </header>
