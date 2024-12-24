@@ -58,4 +58,4 @@ CREATE TABLE bands (
 );
 
 
- this is code for home page. give code so that user can search for a gig or band or artist from database..
+ this is code for home page. give code so that user can search for a gig or band or artist from database..obdknkztieqmttbk

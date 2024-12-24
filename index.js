@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 
@@ -20,6 +21,13 @@ const saltRounds = 10;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+
 // Database Connection
 const db = new pg.Client({
     user: process.env.PG_USER,
@@ -29,6 +37,40 @@ const db = new pg.Client({
     port: process.env.PG_PORT,
 });
 db.connect();
+
+const transporter = nodemailer.createTransport({
+    service: "gmail", // You can use Gmail or other email services
+    auth: {
+      user: "joshimanan074@gmail.com", // Replace with your email
+      pass: process.env.MAIL_PASS // Use your Gmail app password
+    }
+  });
+  
+  // POST route to handle contact form submission
+  app.post("/send-email", (req, res) => {
+    const { name, email, message } = req.body;
+  
+    // Validate input (optional)
+    if (!name || !email || !message) {
+      return res.status(400).send("All fields are required.");
+    }
+  
+    const mailOptions = {
+      from: email,
+      to: "joshimanan074@gmail.com",
+      subject: `Contact Form Submission from ${name}`,
+      text: `You received a new message from your contact form:\n\nName: ${name}\nEmail: ${email}\nMessage:\n${message}`
+    };
+  
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending email:", error);
+        return res.status(500).send("Failed to send email.");
+      }
+      console.log("Email sent:", info.response);
+      res.send("Email sent successfully!");
+    });
+  });
 
 // Session Configuration
 app.use(
@@ -85,12 +127,7 @@ const upload = multer({ storage });
 
 
 // App Configuration
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(express.static("public"));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json());
+
 // Authentication Middleware
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated() && req.user) {
