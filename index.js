@@ -568,21 +568,23 @@ app.get('/ratings/:musician_id', async (req, res) => {
 });
 
 // Fetch all reviews for a musician
-app.get('/ratings/:musician_id/reviews', async (req, res) => {
-    const { musician_id } = req.params;
-
+app.get("/ratings/:musicianId/reviews", async (req, res) => {
+    const musicianId = req.params.musicianId;
+    
     try {
-        const result = await db.query(
-            `SELECT user_id, rating, comment, created_at 
-             FROM ratings WHERE musician_id = $1 ORDER BY created_at DESC`,
-            [musician_id]
-        );
-        res.status(200).send(result.rows);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send({ error: 'Internal Server Error' });
+      const reviewsResult = await db.query("SELECT r.rating, r.comment, u.name AS username FROM ratings r JOIN users u ON r.user_id = u.id WHERE r.musician_id = $1", [musicianId]);
+  
+      if (reviewsResult.rows.length === 0) {
+        return res.json([]); // No reviews found
+      }
+  
+      res.json(reviewsResult.rows);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      res.status(500).send("Internal Server Error");
     }
-});
+  });
+  
 
 app.post('/ratings', async (req, res) => {
     const { musician_id, user_id, rating, comment } = req.body;
