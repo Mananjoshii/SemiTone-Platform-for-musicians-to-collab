@@ -41,36 +41,36 @@ db.connect();
 const transporter = nodemailer.createTransport({
     service: "gmail", // You can use Gmail or other email services
     auth: {
-      user: "joshimanan074@gmail.com", // Replace with your email
-      pass: process.env.MAIL_PASS // Use your Gmail app password
+        user: "joshimanan074@gmail.com", // Replace with your email
+        pass: process.env.MAIL_PASS // Use your Gmail app password
     }
-  });
-  
-  // POST route to handle contact form submission
-  app.post("/send-email", (req, res) => {
+});
+
+// POST route to handle contact form submission
+app.post("/send-email", (req, res) => {
     const { name, email, message } = req.body;
-  
+
     // Validate input (optional)
     if (!name || !email || !message) {
-      return res.status(400).send("All fields are required.");
+        return res.status(400).send("All fields are required.");
     }
-  
+
     const mailOptions = {
-      from: email,
-      to: "joshimanan074@gmail.com",
-      subject: `Contact Form Submission from ${name}`,
-      text: `You received a new message from your contact form:\n\nName: ${name}\nEmail: ${email}\nMessage:\n${message}`
+        from: email,
+        to: "joshimanan074@gmail.com",
+        subject: `Contact Form Submission from ${name}`,
+        text: `You received a new message from your contact form:\n\nName: ${name}\nEmail: ${email}\nMessage:\n${message}`
     };
-  
+
     transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error sending email:", error);
-        return res.status(500).send("Failed to send email.");
-      }
-      console.log("Email sent:", info.response);
-      res.send("Email sent successfully!");
+        if (error) {
+            console.error("Error sending email:", error);
+            return res.status(500).send("Failed to send email.");
+        }
+        console.log("Email sent:", info.response);
+        res.send("Email sent successfully!");
     });
-  });
+});
 
 // Session Configuration
 app.use(
@@ -197,6 +197,58 @@ app.get("/profile", isAuthenticated, (req, res) => {
         res.render("profile_musician", { user: result.rows[0] });
     });
 });
+
+app.get('/band/:bandId', async (req, res) => {
+    const { bandId } = req.params;
+
+    try {
+        // Fetch band details
+        const bandQuery = `
+        SELECT id, name, email, description, genre, profile_picture
+        FROM users
+        WHERE role = 'band_member' AND id = $1
+      `;
+        const bandResult = await db.query(bandQuery, [bandId]);
+
+        if (bandResult.rowCount === 0) {
+            return res.status(404).json({ message: 'Band not found' });
+        }
+
+        const band = bandResult.rows[0];
+
+        // Fetch band members
+        const membersQuery = `
+        SELECT id, name, instrument, profile_picture
+        FROM users
+        WHERE band_id = $1 AND role = 'musician'
+      `;
+        const membersResult = await db.query(membersQuery, [bandId]);
+
+        const members = membersResult.rows;
+
+        // Fetch band posts
+        const postsQuery = `
+        SELECT id, title, description, type, file
+        FROM band_posts
+        WHERE user_id = $1
+      `;
+        const postsResult = await db.query(postsQuery, [bandId]);
+
+        const posts = postsResult.rows;
+
+        // Send response
+        res.json({
+            band,
+            members,
+            posts,
+        });
+    } catch (error) {
+        console.error('Error fetching band data:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
 app.get("/search", async (req, res) => {
     const { query } = req.query;
     try {
@@ -223,35 +275,7 @@ app.get("/search", async (req, res) => {
     }
 });
 
-
-// app.get("/about", (req, res) => {
-//     // Assuming you're using a session to store the logged-in user
-//     const user = req.session.user; // Replace this with your user retrieval logic
-
-//     if (!user) {
-//         return res.redirect("/login"); // Redirect to login if no user is logged in
-//     }
-
-//     // Fetch user details from the database if needed
-//     db.query("SELECT * FROM users WHERE id = $1", [user.id], (err, result) => {
-//         if (err) {
-//             console.error("Database error:", err);
-//             return res.status(500).send("Internal Server Error");
-//         }
-
-//         if (result.rows.length === 0) {
-//             console.error("User not found in the database.");
-//             return res.status(404).send("User not found");
-//         }
-
-//         // Pass user details to the EJS template
-//         res.render("about", { user: result.rows[0] });
-//     });
-// });
-
-
-
-app.get("/artists",(req, res) => {
+app.get("/artists", (req, res) => {
     db.query("SELECT * FROM artists", (err, result) => {
         if (err) {
             console.error("Error fetching artists:", err);
@@ -261,49 +285,66 @@ app.get("/artists",(req, res) => {
     });
 });
 
+app.get("/profile/:id", async (req, res) => {
+    const userId = req.params.id;
 
-// // Route for artist profile
-// app.get("/artist/:id", (req, res) => {
-//     const artistId = req.params.id;
+    try {
+        const userResult = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
 
-//     db.query("SELECT * FROM artists WHERE id = $1", [artistId], (err, result) => {
-//         if (err) return res.status(500).send("Error fetching artist profile");
-
-//         if (result.rows.length === 0) {
-//             return res.status(404).send("Artist not found");
-//         }
-
-//         res.render("artist-profile", { artist: result.rows[0] });
-//     });
-// });
-
-app.get("/profile/:id", (req, res) => {
-    const artistId = req.params.id;
-
-    db.query("SELECT * FROM artists WHERE id = $1", [artistId], (err, result) => {
-        if (err) {
-            console.error("Database error:", err);
-            return res.status(500).send("Internal Server Error");
+        if (userResult.rows.length === 0) {
+            console.error("User not found.");
+            return res.status(404).send("User not found");
         }
 
-        if (result.rows.length === 0) {
-            console.error("Artist not found in the database.");
-            return res.status(404).send("Artist not found");
-        }
+        const user = userResult.rows[0];
 
-        // Pass the artist data as `user` to match the template
-        res.render("profile_musician", { user: result.rows[0] });
-    });
+        if (user.role === "musician") {
+            // Render musician profile
+            return res.render("profile_musician", { user });
+        } else if (user.role === "band_member") {
+            // Fetch the associated band details for the band_member
+            const bandResult = await db.query("SELECT * FROM bands WHERE id = $1", [user.band_id]);
+
+            if (bandResult.rows.length === 0) {
+                console.error("Band not found.");
+                return res.status(404).send("Band not found");
+            }
+
+            const band = bandResult.rows[0];
+
+            // Fetch band members
+            const membersResult = await db.query(
+                "SELECT id, name, instrument, profile_picture FROM users WHERE band_id = $1 AND role = 'band_member'",
+                [user.band_id]
+            );
+
+            // Fetch band posts
+            const postsResult = await db.query(
+                "SELECT id, title, description, type, file FROM band_posts WHERE band_id = $1",
+                [user.band_id]
+            );
+
+            return res.render("profile_band", {
+                user,
+                band: { ...band, members: membersResult.rows, posts: postsResult.rows },
+            });
+        } else {
+            return res.status(400).send("Invalid user role");
+        }
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
-
-
-
 app.get("/api/artist/:id", (req, res) => {
-    const artistId = req.params.id;
+    const userId = req.params.id;
 
-    db.query("SELECT * FROM artists WHERE id = $1", [artistId], (err, result) => {
-        if (err) return res.status(500).json({ error: "Error fetching artist details" });
+    db.query("SELECT * FROM users WHERE id = $1 AND role = 'musician'", [userId], (err, result) => {
+        if (err) {
+            console.error("Error fetching artist details:", err);
+            return res.status(500).json({ error: "Internal Server Error" });
+        }
 
         if (result.rows.length === 0) {
             return res.status(404).json({ error: "Artist not found" });
@@ -312,6 +353,7 @@ app.get("/api/artist/:id", (req, res) => {
         res.json(result.rows[0]);
     });
 });
+
 
 
 app.get("/bands", (req, res) => {
@@ -331,7 +373,7 @@ app.get("/events", isAuthenticated, (req, res) => {
 app.get("/add-event", isAuthenticated, (req, res) => {
     res.render("add-event", { user: req.user });
 });
-app.get("/about",  (req, res) => {
+app.get("/about", (req, res) => {
     res.render("about");
 });
 
@@ -350,7 +392,21 @@ app.post("/add-event", isAuthenticated, upload.single("image"), (req, res) => {
 
 app.get("/login", (req, res) => res.render("login"));
 
-app.post("/login", passport.authenticate("local", { successRedirect: "/", failureRedirect: "/login" }));
+app.post(
+    "/login",
+    passport.authenticate("local", { failureRedirect: "/login" }),
+    (req, res) => {
+        // Redirect based on user role
+        if (req.user.role === "band_member") {
+            res.redirect(`/band/${req.user.id}`); // Redirect to Band Profile
+        } else if (req.user.role === "musician") {
+            res.redirect(`/profile/${req.user.id}`); // Redirect to Musician Profile
+        } else {
+            res.redirect("/"); // Default fallback
+        }
+    }
+);
+
 
 app.get("/register", (req, res) => res.render("register"));
 
@@ -364,7 +420,6 @@ app.post(
     async (req, res) => {
         const { email, password, name, role, description, instrument } = req.body;
 
-        // Check for required fields
         if (!email || !password || !name || !role || !instrument) {
             return res.status(400).send("All fields are required.");
         }
@@ -378,13 +433,13 @@ app.post(
             const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
 
             if (checkResult.rows.length > 0) {
-                return res.redirect("/login");  // If email exists, redirect to login
+                return res.redirect("/login");
             }
 
-            // Hash the password using bcrypt
+            // Hash the password
             const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-            // Insert user into the database
+            // Insert the user into the database
             const result = await db.query(
                 `INSERT INTO users 
                 (email, password, name, role, description, profile_picture, video, audio, instrument) 
@@ -405,13 +460,19 @@ app.post(
 
             const user = result.rows[0];
 
-            // Log the user in and redirect to profile
+            // Log the user in and redirect based on the role
             req.login(user, (err) => {
                 if (err) {
                     console.error("Error logging in user:", err);
                     return res.status(500).send("Internal Server Error");
                 } else {
-                    res.redirect("/profile_musician");
+                    if (role === "musician") {
+                        res.redirect(`/profile/${user.id}`);
+                    } else if (role === "band_member") {
+                        res.redirect(`/profile/${user.id}`); // Redirect to band profile
+                    } else {
+                        res.redirect("/"); // Default fallback
+                    }
                 }
             });
         } catch (err) {
@@ -421,6 +482,58 @@ app.post(
     }
 );
 
+
+app.get('/band/:id', async (req, res) => {
+    const bandId = req.params.id;
+
+    try {
+        // Fetch band details
+        const bandQuery = `SELECT * FROM bands WHERE id = $1`;
+        const bandResult = await db.query(bandQuery, [bandId]);
+
+        if (bandResult.rows.length === 0) {
+            return res.status(404).send('Band not found');
+        }
+
+        const band = bandResult.rows[0];
+
+        // Fetch band members
+        const membersQuery = `
+            SELECT id, name, instrument, profile_picture
+            FROM users
+            WHERE band_id = $1 AND role = 'band_member'
+        `;
+        const membersResult = await db.query(membersQuery, [bandId]);
+
+        res.render('profile_band', {
+            band,
+            members: membersResult.rows,
+        });
+    } catch (err) {
+        console.error('Error fetching band data:', err);
+        res.status(500).send('Internal server error');
+    }
+});
+
+
+// Upload Band Profile Picture
+app.post('/band/:id/upload', upload.single('profile_picture'), async (req, res) => {
+    const bandId = req.params.id;
+    const profilePicture = req.file.filename;
+
+    try {
+        const updateQuery = `
+            UPDATE bands
+            SET profile_picture = $1
+            WHERE id = $2
+        `;
+        await db.query(updateQuery, [profilePicture, bandId]);
+        res.redirect(`/band/${bandId}`);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
+});
 
 
 app.get("/logout", (req, res) => {
