@@ -300,8 +300,8 @@ app.get("/profile/:id", async (req, res) => {
         const user = userResult.rows[0];
 
         if (user.role === "musician") {
-            // Render musician profile
-            return res.render("profile_musician", { user });
+            // Render musician profile and pass musicianId and userId
+            return res.render("profile_musician", { user, musicianId: user.id, userId });
         } else if (user.role === "band_member") {
             // Fetch the associated band details for the band_member
             const bandResult = await db.query("SELECT * FROM bands WHERE id = $1", [user.band_id]);
@@ -328,6 +328,8 @@ app.get("/profile/:id", async (req, res) => {
             return res.render("profile_band", {
                 user,
                 band: { ...band, members: membersResult.rows, posts: postsResult.rows },
+                musicianId: user.band_id,  // Passing band_id as musicianId for the band member
+                userId
             });
         } else {
             return res.status(400).send("Invalid user role");
@@ -337,6 +339,7 @@ app.get("/profile/:id", async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
 
 app.get("/api/artist/:id", (req, res) => {
     const userId = req.params.id;
@@ -547,5 +550,59 @@ app.get("/logout", (req, res) => {
     });
 });
 
+// Fetch average rating for a musician
+app.get('/ratings/:musician_id', async (req, res) => {
+    const { musician_id } = req.params;
+
+    try {
+        const result = await db.query(
+            `SELECT AVG(rating)::NUMERIC(3, 2) AS average_rating, COUNT(*) AS total_reviews 
+             FROM ratings WHERE musician_id = $1`,
+            [musician_id]
+        );
+        res.status(200).send(result.rows[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+});
+
+// Fetch all reviews for a musician
+app.get('/ratings/:musician_id/reviews', async (req, res) => {
+    const { musician_id } = req.params;
+
+    try {
+        const result = await db.query(
+            `SELECT user_id, rating, comment, created_at 
+             FROM ratings WHERE musician_id = $1 ORDER BY created_at DESC`,
+            [musician_id]
+        );
+        res.status(200).send(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+});
+
+app.post('/ratings', async (req, res) => {
+    const { musician_id, user_id, rating, comment } = req.body;
+  
+    if (!musician_id || !user_id) {
+      return res.status(400).json({ error: 'Musician ID and User ID are required' });
+    }
+  
+    try {
+      const query = `
+        INSERT INTO ratings (musician_id, user_id, rating, comment)
+        VALUES ($1, $2, $3, $4)
+      `;
+      await db.query(query, [musician_id, user_id, rating, comment]);
+      res.status(200).json({ message: 'Rating submitted successfully!' });
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+      res.status(500).json({ error: 'Error submitting rating' });
+    }
+  });
+  
 // Start the Server
 app.listen(port, () => console.log(`Server running at http://localhost:${port}`));
