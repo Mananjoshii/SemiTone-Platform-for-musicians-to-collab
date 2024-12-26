@@ -198,6 +198,56 @@ app.get("/profile", isAuthenticated, (req, res) => {
     });
 });
 
+// app.get('/band/:bandId', async (req, res) => {
+//     const { bandId } = req.params;
+
+//     try {
+//         // Fetch band details
+//         const bandQuery = `
+//         SELECT id, name, email, description, genre, profile_picture
+//         FROM users
+//         WHERE role = 'band_member' AND id = $1
+//       `;
+//         const bandResult = await db.query(bandQuery, [bandId]);
+
+//         if (bandResult.rowCount === 0) {
+//             return res.status(404).json({ message: 'Band not found' });
+//         }
+
+//         const band = bandResult.rows[0];
+
+//         // Fetch band members
+//         const membersQuery = `
+//         SELECT id, name, instrument, profile_picture
+//         FROM users
+//         WHERE band_id = $1 AND role = 'musician'
+//       `;
+//         const membersResult = await db.query(membersQuery, [bandId]);
+
+//         const members = membersResult.rows;
+
+//         // Fetch band posts
+//         const postsQuery = `
+//         SELECT id, title, description, type, file
+//         FROM band_posts
+//         WHERE user_id = $1
+//       `;
+//         const postsResult = await db.query(postsQuery, [bandId]);
+
+//         const posts = postsResult.rows;
+
+//         // Send response
+//         res.json({
+//             band,
+//             members,
+//             posts,
+//         });
+//     } catch (error) {
+//         console.error('Error fetching band data:', error.message);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// });
+
 app.get('/band/:bandId', async (req, res) => {
     const { bandId } = req.params;
 
@@ -211,7 +261,7 @@ app.get('/band/:bandId', async (req, res) => {
         const bandResult = await db.query(bandQuery, [bandId]);
 
         if (bandResult.rowCount === 0) {
-            return res.status(404).json({ message: 'Band not found' });
+            return res.status(404).send("Band not found");
         }
 
         const band = bandResult.rows[0];
@@ -236,15 +286,15 @@ app.get('/band/:bandId', async (req, res) => {
 
         const posts = postsResult.rows;
 
-        // Send response
-        res.json({
+        // Render the EJS template
+        res.render('band_profile', {
             band,
             members,
             posts,
         });
     } catch (error) {
         console.error('Error fetching band data:', error.message);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).send("Internal server error");
     }
 });
 
@@ -276,7 +326,7 @@ app.get("/search", async (req, res) => {
 });
 
 app.get("/artists", (req, res) => {
-    db.query("SELECT * FROM artists", (err, result) => {
+    db.query("SELECT * FROM users WHERE role='musician'", (err, result) => {
         if (err) {
             console.error("Error fetching artists:", err);
             return res.status(500).send("Error fetching artists");
