@@ -212,6 +212,18 @@
 
       <!-- Rating and Reviews Section -->
       <section class="container my-4">
+        <h2 class="mb-4">User Posts</h2>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="card">
+              <video src="/uploads/videos/<%= user.video %>" controls></video>
+              <div class="card-body">
+                <h5 class="card-title">Sample Title</h5>
+                <p class="card-text">Sample Description</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <h2 class="mb-4">Rate This Musician</h2>
         <form id="ratingForm">
           <input type="hidden" id="musicianId" value="<%= musicianId %>">
