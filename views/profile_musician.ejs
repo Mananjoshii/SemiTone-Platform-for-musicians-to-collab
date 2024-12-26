@@ -337,7 +337,7 @@
         reviewsContainer.innerHTML = reviewsData.map(review => `
           <div class="review">
             <p>Rated this musician ${generateStars(review.rating)}</p>
-            <p>${review.comment}</p>
+            <p>Reviews- ${review.comment}</p>
           </div>
         `).join('');
       } else {
