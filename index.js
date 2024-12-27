@@ -258,9 +258,10 @@ app.get("/search", async (req, res) => {
         }
 
         const sqlQuery = `
-            SELECT id, name, profile_picture, description 
-            FROM users 
-            WHERE role = 'musician' AND name ILIKE $1
+        SELECT id, name, profile_picture, description 
+        FROM users 
+        WHERE (role = 'musician' OR role = 'band_member') AND name ILIKE $1;
+        
         `;
 
         const result = await db.query(sqlQuery, [`%${query}%`]);
@@ -509,7 +510,7 @@ app.get('/band/:id', async (req, res) => {
         `;
         const membersResult = await db.query(membersQuery, [bandId]);
 
-        res.render('profile_band', {
+        res.render('band_profile', {
             band,
             members: membersResult.rows,
         });
@@ -604,6 +605,91 @@ app.post('/ratings', async (req, res) => {
       console.error('Error submitting rating:', error);
       res.status(500).json({ error: 'Error submitting rating' });
     }
+  });
+
+  app.post('/send-friend-request', async (req, res) => {
+    try {
+      const { senderId, receiverId } = req.body;
+  
+      // Check for existing friendship
+      const existingFriendship = await db.query(
+        'SELECT * FROM friendships WHERE (user_id = $1 AND friend_id = $2) OR (user_id = $2 AND friend_id = $1)', 
+        [senderId, receiverId] 
+      );
+  
+      if (existingFriendship.rows.length > 0) {
+        return res.status(400).json({ error: 'Friendship already exists' });
+      }
+  
+      await db.query(
+        'INSERT INTO friendships (user_id, friend_id) VALUES ($1, $2)',
+        [senderId, receiverId]
+      );
+  
+      res.status(201).json({ message: 'Friend request sent' });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to send friend request' });
+    }
+  });
+  // Receive friend requests
+  app.get('/friend-requests', async (req, res) => {
+    try {
+      const { userId } = req.query;
+  
+      const result = await db.query(
+        'SELECT u.username, u.id FROM friendships f JOIN users u ON f.friend_id = u.id WHERE f.user_id = $1 AND f.status = $2',
+        [userId, 'pending']
+      );
+  
+      res.json(result.rows);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to fetch friend requests' });
+    }
+  });
+  
+  // Respond to friend request (accept/reject)
+  app.put('/respond-to-request', async (req, res) => {
+    try {
+      const { requestId, status } = req.body;
+  
+      await db.query(
+        'UPDATE friendships SET status = $1 WHERE id = $2',
+        [status, requestId]
+      );
+  
+      res.status(200).json({ message: `Friend request ${status}` });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to respond to request' });
+    }
+  });
+  
+  // Get total number of friends
+  app.get('/total-friends', async (req, res) => {
+    try {
+      const { userId } = req.query;
+  
+      const result = await db.query(
+        `
+          SELECT COUNT(*) FROM friendships 
+          WHERE (user_id = $1 AND status = 'accepted') 
+          OR (friend_id = $1 AND status = 'accepted')
+        `,
+        [userId]
+      );
+  
+      res.json({ totalFriends: result.rows[0].count });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to get total friends' });
+    }
+  });
+  
+  // Serve frontend EJS file (assuming a views directory)
+  app.get('/send-friend-request', (req, res) => {
+    res.render('connections.ejs'); // Replace with your actual EJS file name
   });
   
 // Start the Server

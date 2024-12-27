@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Band Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .img-thumbnail {
+            border-radius: 50px;
+        }
+
+        .dashboard-container {
+            padding: 20px;
+        }
+
+        .profile-section img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            border-radius: 20px;
+        }
+
+        .list-group-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .band-members img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .reviews {
+            margin-top: 40px;
+        }
+
+        .reviews h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .review {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .review-header h5 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .review-header .rating span {
+            color: #FFD700;
+        }
+
+        .review-body p {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="p-3 mb-3 border-bottom" style="background-color: black; color: white;">
+        <div class="container">
+            <span class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <img src="/SEMITONE_LOGO.gif" alt="MusicHub Logo" width="200">
+                </a>
+            </span>
+            <a href="/logout" class="btn btn-danger" style="margin-left: 93%;">Logout</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="dashboard-container container">
+            <div class="row">
+                <!-- Band Info Section -->
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h1 class="display-4">The Rockers</h1>
+                            <img src="/uploads/images/default-band.jpg" alt="The Rockers" class="img-thumbnail mb-3">
+                            <p class="text-muted mb-3">A passionate group of musicians creating magic through rock music.</p>
+                            <p><strong>Genre:</strong> Rock</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Section -->
+                <div class="col-lg-6 col-md-8">
+                    <!-- Band Details -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Band Information:</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Email:</strong> therockers@example.com</li>
+                                <li class="list-group-item"><strong>Location:</strong> Los Angeles, CA</li>
+                                <li class="list-group-item"><strong>Founded:</strong> 2010</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Band Members Section -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Band Members:</h5>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <img src="/uploads/images/default-musician.jpg" alt="John Doe" class="band-members">
+                                        <div>
+                                            <h6>John Doe</h6>
+                                            <p><strong>Instrument:</strong> Lead Guitar</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex align-items-center">
+                                        <img src="/uploads/images/default-musician.jpg" alt="Jane Smith" class="band-members">
+                                        <div>
+                                            <h6>Jane Smith</h6>
+                                            <p><strong>Instrument:</strong> Drums</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Links and Reviews Section -->
+                <div class="col-lg-3 col-md-4">
+                    <!-- Social Media Links -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Connect with Us:</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><a href="https://facebook.com/therockers" target="_blank">Facebook</a></li>
+                                <li class="list-group-item"><a href="https://instagram.com/therockers" target="_blank">Instagram</a></li>
+                                <li class="list-group-item"><a href="https://twitter.com/therockers" target="_blank">Twitter</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Fan Reviews -->
+                    <div class="reviews">
+                        <h2>Fan Reviews</h2>
+                        <div class="review">
+                            <div class="review-header">
+                                <h5>Emily Brown</h5>
+                                <div class="rating">
+                                    <span>&#9733;&#9733;&#9733;&#9733;&#9734;</span> 4/5
+                                </div>
+                            </div>
+                            <div class="review-body">
+                                <p>"The Rockers gave an incredible performance at the festival! Can't wait to see them again."</p>
+                            </div>
+                        </div>
+                        <div class="review">
+                            <div class="review-header">
+                                <h5>Michael Green</h5>
+                                <div class="rating">
+                                    <span>&#9733;&#9733;&#9733;&#9733;&#9733;</span> 5/5
+                                </div>
+                            </div>
+                            <div class="review-body">
+                                <p>"Absolutely amazing band. Their music is so inspiring!"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Band Posts Section -->
+            <section class="container my-4">
+                <h2 class="mb-4">Band Posts</h2>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <video src="/uploads/videos/sample-video.mp4" controls class="card-img-top"></video>
+                            <div class="card-body">
+                                <h5 class="card-title">Live Performance at Music Fest</h5>
+                                <p class="card-text">Check out our electrifying performance at the Summer Music Festival 2024!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upcoming Events Section -->
+            <section class="container my-4">
+                <h2 class="mb-4">Upcoming Events</h2>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>Rock Festival 2024</strong> - March 15, 2024 at Madison Square Garden
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Summer Beats</strong> - June 20, 2024 at Central Park
+                    </li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="container">
+            <p class="float-end"><a href="#">Back to top</a></p>
+            <p>&copy; 2017–2024 Band, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+        </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

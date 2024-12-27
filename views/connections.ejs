@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friend Management System</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+  <h1>Friend Management</h1>
+
+  <form id="send-friend-request-form" method="POST" action="/send-friend-request"> 
+    <label for="senderId">Your User ID:</label>
+    <input type="number" id="senderId" name="senderId" required>
+    <label for="receiverId">Friend's User ID:</label>
+    <input type="number" id="receiverId" name="receiverId" required>
+    <button type="submit">Send Friend Request</button>
+  </form>
+
+  <h2>Friend Requests</h2>
+  <ul id="friendRequestsList"></ul>
+
+  <h2>Total Friends</h2>
+  <p id="totalFriendsCount"></p>
+
+  <script>
+    // Function to send a friend request
+    $(document).ready(function() {
+      $('#send-friend-request-form').submit(function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const senderId = $('#senderId').val();
+        const receiverId = $('#receiverId').val();
+
+        $.ajax({
+          type: 'POST',
+          url: '/send-friend-request',
+          data: JSON.stringify({ senderId, receiverId }),
+          contentType: 'application/json',
+          success: function(response) {
+            alert(response.message); // Display success message
+          },
+          error: function(error) {
+            alert('Error sending friend request.');
+            console.error(error);
+          }
+        });
+      });
+    });
+
+    // (Add functions for receiving friend requests, responding, and getting total friends)
+  </script>
+</body>
+</html>

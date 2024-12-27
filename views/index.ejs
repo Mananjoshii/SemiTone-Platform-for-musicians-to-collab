@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+</head>
+<body>
+  <h1>Welcome, <%= user.name %>!</h1>
+
+  <!-- Existing Profile Section -->
+  <section>
+    <h2>Your Profile</h2>
+    <p>Email: <%= user.email %></p>
+    <p>Connections: <%= user.connections_count || 0 %></p>
+  </section>
+
+  <!-- New Friend Request Features -->
+  <section>
+    <h2>All Users</h2>
+    <ul>
+      <% allUsers.forEach(user => { %>
+        <li>
+          <%= user.name %>
+          <form action="/friend-request/send" method="POST" style="display: inline;">
+            <input type="hidden" name="senderId" value="<%= req.user.id %>">
+            <input type="hidden" name="receiverId" value="<%= user.id %>">
+            <button type="submit">Send Friend Request</button>
+          </form>
+        </li>
+      <% }); %>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Pending Friend Requests</h2>
+    <ul>
+      <% pendingRequests.forEach(request => { %>
+        <li>
+          Request from User ID: <%= request.sender_id %>
+          <form action="/friend-request/accept" method="POST" style="display: inline;">
+            <input type="hidden" name="requestId" value="<%= request.id %>">
+            <button type="submit">Accept</button>
+          </form>
+          <form action="/friend-request/reject" method="POST" style="display: inline;">
+            <input type="hidden" name="requestId" value="<%= request.id %>">
+            <button type="submit">Reject</button>
+          </form>
+        </li>
+      <% }); %>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Your Connections</h2>
+    <ul>
+      <% connections.forEach(connection => { %>
+        <li>
+          Friend ID: <%= connection.friend_id %>
+       

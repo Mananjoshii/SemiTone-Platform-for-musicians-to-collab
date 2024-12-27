@@ -20,9 +20,13 @@
                                  class="card-img-top" alt="<%= profile.name %>">
                             <div class="card-body">
                                 <h5 class="card-title"><%= profile.name %></h5>
-                                <p class="card-text"><strong>Genre:</strong> <%= profile.genre %></p>
-                                <p class="card-text"><%= profile.bio %></p>
-                                <a href="/profile/<%= profile.id %>" class="btn btn-primary">View Profile</a>
+                                <p class="card-text"><strong>Genre:</strong> <%= profile.genre || 'Unknown' %></p>
+                                <p class="card-text"><%= profile.bio || 'No bio available.' %></p>
+                                <% if (profile.role === 'band_member') { %>
+                                    <a href="/band/<%= profile.id %>" class="btn btn-primary">View Band</a>
+                                <% } else { %>
+                                    <a href="/profile/<%= profile.id %>" class="btn btn-primary">View Profile</a>
+                                <% } %>
                             </div>
                         </div>
                     </div>

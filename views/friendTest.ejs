@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Friend Request System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .user-list {
+      list-style: none;
+      padding: 0;
+    }
+    .user-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      padding: 8px 12px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button.send {
+      background-color: #4caf50;
+      color: white;
+    }
+    button.cancel {
+      background-color: #f44336;
+      color: white;
+    }
+    button.accept {
+      background-color: #008cba;
+      color: white;
+    }
+    button.reject {
+      background-color: #f44336;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Friend Request System</h1>
+    <h2>All Users</h2>
+    <ul id="user-list" class="user-list"></ul>
+
+    <h2>Pending Friend Requests</h2>
+    <ul id="pending-requests" class="user-list"></ul>
+
+    <h2>Your Connections</h2>
+    <ul id="connections" class="user-list"></ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+<script>
+    const apiUrl = 'http://localhost:3000'; // Replace with your backend API URL
+
+// Fetch and display all users
+async function fetchUsers() {
+  try {
+    const response = await fetch(`${apiUrl}/users`);
+    const users = await response.json();
+
+    const userList = document.getElementById('user-list');
+    userList.innerHTML = '';
+    users.forEach(user => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span>${user.name}</span>
+        <button class="send" onclick="sendFriendRequest(${user.id})">Send Request</button>
+      `;
+      userList.appendChild(li);
+    });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+  }
+}
+
+// Fetch and display pending friend requests
+async function fetchPendingRequests(userId) {
+  try {
+    const response = await fetch(`${apiUrl}/friend-requests/pending/${userId}`);
+    const requests = await response.json();
+
+    const pendingList = document.getElementById('pending-requests');
+    pendingList.innerHTML = '';
+    requests.forEach(request => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span>Request from User ID: ${request.sender_id}</span>
+        <button class="accept" onclick="acceptFriendRequest(${request.id})">Accept</button>
+        <button class="reject" onclick="rejectFriendRequest(${request.id})">Reject</button>
+      `;
+      pendingList.appendChild(li);
+    });
+  } catch (error) {
+    console.error('Error fetching pending requests:', error);
+  }
+}
+
+// Fetch and display connections
+async function fetchConnections(userId) {
+  try {
+    const response = await fetch(`${apiUrl}/connections/${userId}`);
+    const connections = await response.json();
+
+    const connectionsList = document.getElementById('connections');
+    connectionsList.innerHTML = '';
+    connections.forEach(connection => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span>User ID: ${connection.friend_id}</span>
+        <button class="cancel" onclick="removeConnection(${userId}, ${connection.friend_id})">Remove</button>
+      `;
+      connectionsList.appendChild(li);
+    });
+  } catch (error) {
+    console.error('Error fetching connections:', error);
+  }
+}
+
+// Send a friend request
+async function sendFriendRequest(receiverId) {
+  try {
+    const senderId = 1; // Replace with the logged-in user ID
+    const response = await fetch(`${apiUrl}/friend-request/send`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ senderId, receiverId }),
+    });
+    if (response.ok) {
+      alert('Friend request sent!');
+      fetchUsers();
+    } else {
+      console.error('Error sending friend request');
+    }
+  } catch (error) {
+    console.error('Error sending friend request:', error);
+  }
+}
+
+// Accept a friend request
+async function acceptFriendRequest(requestId) {
+  try {
+    const response = await fetch(`${apiUrl}/friend-request/accept`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestId }),
+    });
+    if (response.ok) {
+      alert('Friend request accepted!');
+      fetchPendingRequests(1); // Replace with the logged-in user ID
+      fetchConnections(1); // Replace with the logged-in user ID
+    } else {
+      console.error('Error accepting friend request');
+    }
+  } catch (error) {
+    console.error('Error accepting friend request:', error);
+  }
+}
+
+// Reject a friend request
+async function rejectFriendRequest(requestId) {
+  try {
+    const response = await fetch(`${apiUrl}/friend-request/reject`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestId }),
+    });
+    if (response.ok) {
+      alert('Friend request rejected!');
+      fetchPendingRequests(1); // Replace with the logged-in user ID
+    } else {
+      console.error('Error rejecting friend request');
+    }
+  } catch (error) {
+    console.error('Error rejecting friend request:', error);
+  }
+}
+
+// Remove a connection
+async function removeConnection(userId1, userId2) {
+  try {
+    const response = await fetch(`${apiUrl}/connections/remove`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId1, userId2 }),
+    });
+    if (response.ok) {
+      alert('Connection removed!');
+      fetchConnections(userId1); // Replace with the logged-in user ID
+    } else {
+      console.error('Error removing connection');
+    }
+  } catch (error) {
+    console.error('Error removing connection:', error);
+  }
+}
+
+// Initial data load
+fetchUsers();
+fetchPendingRequests(1); // Replace with the logged-in user ID
+fetchConnections(1); // Replace with the logged-in user ID
+
+</script>
+</html>
