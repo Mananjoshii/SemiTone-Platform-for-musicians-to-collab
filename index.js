@@ -793,6 +793,50 @@ app.get("/ratings/:musicianId/reviews", async (req, res) => {
         });
     });
 
+    app.post("/add-post", upload.single("video"), async (req, res) => {
+        const { title, description } = req.body;
+        const video = req.file ? req.file.filename : null;
+      
+        if (!title || !description || !video) {
+          return res.status(400).send("All fields are required.");
+        }
+      
+        try {
+          await db.query(
+            "INSERT INTO posts (title, description, video) VALUES ($1, $2, $3)",
+            [title, description, video]
+          );
+      
+          // Redirect to posts page or success page
+          res.redirect("/profile/:id"); // Make sure /posts is a valid route
+        } catch (error) {
+          console.error("Error saving post:", error);
+          res.status(500).send("Internal Server Error");
+        }
+      });
+      
+      // Route to fetch and render posts
+      app.get('/profile', async (req, res) => {
+        try {
+          const userId = req.user.id; // Assuming user is authenticated and `req.user` contains user info
+          const query = `
+            SELECT video, title, description 
+            FROM posts
+            WHERE user_id = $1
+          `;
+          const result = await db.query(query, [userId]);
+      
+          res.render('profile', { user: req.user, posts: result.rows }); // Render posts on profile page
+        } catch (error) {
+          console.error('Error fetching posts:', error.message);
+          res.status(500).json({ message: 'Internal Server Error' });
+        }
+      });
+
+      app.get("/add-post-form", (req, res) => {
+        res.render("add_post_form"); // Make sure "add_post_form.ejs" is created in the views folder
+      });
+      
 
     // Start the Server
     app.listen(port, () => console.log(`Server running at http://localhost:${port}`));

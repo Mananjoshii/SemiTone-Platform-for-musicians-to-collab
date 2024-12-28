@@ -1,62 +1,148 @@
 <!doctype html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Live Events</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <header class="p-3 mb-3 border-bottom" style="background-color: black; color: white;">
-        <div class="container">
-          <div class="d-flex flex-wrap align-items-center justify-content-between">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-              <img src="/SEMITONE_LOGO.gif" alt="MusicHub Logo" width="120">
-            </a>
-            
-            <form class="col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-              <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-            </form>
-            
-          </div>
-        </div>
-      </header>
-    <div class="container mt-4">
-        <h1>Live Events</h1>
+    <title>LiveEvents</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="profile2.css">
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header class="p-3 mb-3 border-bottom" style="background-color: black; color: white;  " p>
+      <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <img src="/SEMITONE_LOGO.gif" alt="Logo" width="120">
+          </a>
+          <div class="break" style="color: black;">
+            <td>
+               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tenetur numquam labore iusto laborum alias autem sapiente, non ea veniam.
 
-        <!-- Add Event Button (Visible to Authorized Users Only) -->
-        <% if (user) { %>
+            </td>
+          </div>
+          <% if (user) { %>
             <div class="mb-4">
                 <a href="/add-event" class="btn btn-success">Add Event</a>
             </div>
-        <% } else { %>
-            <p class="text-muted">You must be logged in to add an event.</p>
-        <% } %>
-        
-        
-
-        <!-- Dynamic Cards Section -->
-        <div class="row g-3">
-            <% if (events.length > 0) { %>
-                <% events.forEach(event => { %>
-                <div class="col-md-4">
-                    <div class="card h-100">
-                        <img src="/uploads/images/<%= event.image %>" class="card-img-top" alt="Event Image">
-                        <div class="card-body">
-                            <h5 class="card-title"><%= event.title %></h5>
-                            <p class="card-text"><%= event.description %></p>
-                        </div>
-                    </div>
-                </div>
-                <% }); %>
-            <% } else { %>
-                <div class="col-12">
-                    <p class="text-center text-muted">No events available at the moment. Add one using the form above.</p>
-                </div>
-            <% } %>
+          <% } else { %>
+            <p class="text-muted text-center">You must be logged in to add an event.</p>
+          <% } %>
         </div>
-    </div>
+      </div>
+    </header>
+
+    
+
+    <!-- Live Events Section -->
+    <section class="container my-4 text-center">
+      <h2 class="mb-4">Live Events</h2>
+      <div class="row g-3">
+        <!-- Static Events -->
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="live1.jpeg" class="card-img-top" alt="Event Image">
+            <div class="card-body">
+              <h5 class="card-title">Bengaluru Drum Fest 2025</h5>
+              <p class="card-text">Taking place on January 31, 2025, this festival celebrates percussion with performances by renowned drummers</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="party2.avif" class="card-img-top" alt="Event Image">
+            <div class="card-body">
+              <h5 class="card-title">Zedd Live in Bengaluru</h5>
+              <p class="card-text">The acclaimed DJ and music producer Zedd is set to perform on March 6, 2025, at Manpho Convention Center. </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="live2.jpeg" class="card-img-top" alt="Event Image">
+            <div class="card-body">
+              <h5 class="card-title">Lollapalooza India 2025</h5>
+              <p class="card-text">Experience the world's largest music festival in March 2025, featuring top international music acts</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row g-3 mt-3">
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="live3.jpeg" class="card-img-top" alt="Event Image">
+            <div class="card-body">
+              <h5 class="card-title">Bangalore's Biggest Music Festival</h5>
+              <p class="card-text">Scheduled for February 15, 2025, this festival promises a lineup of diverse musical performances. </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="live4.jpeg" class="card-img-top" alt="Event Image">
+            <div class="card-body">
+              <h5 class="card-title">Concert Nights!!</h5>
+              <p class="card-text">One Night In DXB Bollywood, EDM | English, Hindi | 18yrs + | 7hrs</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100">
+            <img src="party3.avif" class="card-img-top" alt="Event Image">
+            <div class="card-body">
+              <h5 class="card-title">Sunburn Festival!</h5>
+              <p class="card-text">New Year's Eve at Sunburn Union EDM | English, Hindi | 21yrs + | 6hrs</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row g-3 mt-3">
+      <div class="col-md-4">
+        <div class="card h-100">
+          <img src="live5.jpeg" class="card-img-top" alt="Event Image">
+          <div class="card-body">
+            <h5 class="card-title">Bombay Sapphire</h5>
+            <p class="card-text">One Night with one and only Papon at Forum Mall, EDM | HINDI</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Dynamic Events -->
+      
+        <% if (events.length > 0) { %>
+          <% events.forEach((event, index) => { %>
+            <% if (index % 3 === 0 && index > 0) { %>
+              </div><div class="row g-3 mt-3">
+            <% } %>
+            <div class="col-md-4">
+              <div class="card h-100">
+                <img src="/uploads/images/<%= event.image %>" class="card-img-top" alt="Event Image">
+                <div class="card-body">
+                  <h5 class="card-title"><%= event.title %></h5>
+                  <p class="card-text"><%= event.description %></p>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <p class="text-center text-muted">No events available at the moment. Add one using the form above.</p>
+        <% } %>
+      </div>
+      
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white py-4 mt-5">
+      <div class="container text-center">
+        <p>&copy; 2024 Semitones. All rights reserved.</p>
+        <ul class="nav justify-content-center">
+          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-facebook"></i></a></li>
+          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-twitter"></i></a></li>
+          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-instagram"></i></a></li>
+        </ul>
+      </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+  </body>
 </html>

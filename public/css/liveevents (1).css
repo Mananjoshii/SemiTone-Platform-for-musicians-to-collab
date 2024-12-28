@@ -1,0 +1,29 @@
+img-thumbnail {
+    border-radius: 50px;
+
+}
+.dashboard-container {
+    padding: 20px;
+    
+  }
+  .profile-section img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+  }
+  .btn-connect {
+    margin-top: 5px;
+    font-size: 0.9rem;
+  }
+  .card {
+    margin-bottom: 20px;
+    border-radius: 20px;
+    
+  }
+  .mb-4{
+    position: relative;
+    left: 23px;
+  }
+  
