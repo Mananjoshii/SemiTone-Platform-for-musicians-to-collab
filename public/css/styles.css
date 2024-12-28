@@ -18,11 +18,37 @@
         background-color: #d93f00;
       }
       .hero-section {
+        position: relative;
         background: url('https://images.lifestyleasia.com/wp-content/uploads/sites/5/2023/05/17205156/Coldplay-Hero-2-1600x900.jpg') no-repeat center center;
         background-size: cover;
-        color: white;
+        color: #ffffff;
         padding: 100px 20px;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-weight: bolder;
       }
+      
+      .hero-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        z-index: 1; /* Make sure the text is above the background */
+        text-size-adjust: 23px;
+      }
+      
+      .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5); /* Optional dark overlay for better readability */
+        z-index: 0;
+        filter: blur(-300px);
+      }
+      
       .custom-card {
         background-size: cover;
         height: 300px;
@@ -31,4 +57,13 @@
       footer {
         background-color: #000;
         color: white;
+      }
+      .dropdown text-end{
+      
+      
+        padding: 45px;
+
+      }
+      .break{
+        color: #000;
       }

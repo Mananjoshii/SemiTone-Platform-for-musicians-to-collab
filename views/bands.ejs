@@ -5,192 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Band Profiles</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="bandprofiles.css">
     <!-- Font Awesome CDN for social media icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <style>
-      .list-group-item {
-    margin-bottom: 20px;  
-    padding: 20px;  
-    border-radius: 15px;  
-    display: flex;
-    align-items: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-}
-
-.list-group-item img {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    margin-right: 20px;
-    border-radius: 50%;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-}
-
-.btn {
-    margin-top: 10px;
-}
-
-footer {
-    background-color: black;
-    color: white;
-    padding: 20px 0;
-    text-align: center;
-    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); 
-    border-top: 2px solid white; 
-}
-
-footer .nav {
-    justify-content: center;
-}
-
-footer .nav-link {
-    color: white;
-    padding: 0 10px;
-}
-
-footer .nav-link:hover {
-    color: #ddd;
-}
-
-  .list-group-item {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-radius: 15px;
-    border: none;
-    margin-bottom: 20px;
-    background: rgba(255, 255, 255, 0.1); /* Optional semi-transparent effect */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  .list-group-item:hover {
-    transform: scale(1.03);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-  }
-
-  .list-group-item img {
-    transition: transform 0.3s ease;
-    border-radius: 10px;
-  }
-
-  .list-group-item:hover img {
-    transform: scale(1.05);
-  }
-
-  .btn {
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-
-  .btn:hover {
-    background-color: #ffc107;
-    transform: scale(1.1);
-  }
-
-  .container {
-  margin-top: 20px;
-}
-
-.card {
-  width: 100%;
-  height: 100%;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.card-img-top {
-  width: 100%;
-  height: auto; /* Ensure the height adjusts automatically */
-  max-height: 200px; /* Limit the height to avoid oversized images */
-  object-fit: contain; /* Show the entire image without cropping */
-  background-color: #f8f9fa; /* Add a neutral background for images with transparency */
-  padding: 5px; /* Add some padding to separate the image from the card edges */
-}
-
-.card-body {
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.card-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.card-text {
-  font-size: 0.95rem;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.btn {
-  display: block;
-  margin-top: auto;
-  text-align: center;
-}
-
-
-    </style>
   </head>
-<body>
-  <!-- Header Section -->
-  <header class="p-3 mb-3 border-bottom" style="background-color: black; color: white;">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-between">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-          <img src="/SEMITONE_LOGO.gif" alt="MusicHub Logo" width="120">
-        </a>
-        <form action="/search" method="GET" class="col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-          <input type="search" name="query" class="form-control" placeholder="Search..." aria-label="Search" required>
-          <button type="submit" class="btn btn-primary">Search</button>
-      </form>
-      
+  <body>
+    <!-- Header Section -->
+    <header class="p-3 mb-3 border-bottom" style="background-color: black; color: white;">
+      <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-between">
+          <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+            <img src="/SEMITONE_LOGO.gif" alt="Logo" width="120">
+          </a>
+          <div class="break" style="color: black;">
+            <t>
+              heqfwehjv rhgwefq gvwenqwbefqwjhvhgwegfvwqghfvwghvfwdgKGFVdwhgfsfeseqa
+            </t>
+          </div>
+    
+          <form action="/search" method="GET" class="d-flex" role="search">
+            <input type="search" name="query" class="form-control me-2" placeholder="Search..." aria-label="Search" required>
+            <button type="submit" class="btn btn-primary">Search</button>
+          </form>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
+    
 
-
-
-  <!-- Band Profiles Section -->
-  <div class="container">
-    <h2 class="text-center my-4">Band Profiles</h2>
-    <div class="row">
-      <% bands.forEach(band => { %>
-        <div class="col-md-4">
-          <div class="card">
-            <img src="/uploads/images/<%= band.profile_picture || 'default-artist.jpg' %>" class="card-img-top" alt="<%= band.name %>">
-            <div class="card-body">
-              <h5 class="card-title"><%= band.name %></h5>
-              <p class="card-text"><strong>Genre:</strong> <%= band.genre %></p>
-              <p class="card-text"><strong>Members:</strong> <%= band.members %></p>
-              <p class="card-text"><%= band.description || 'No description available.' %></p>
-              <a href="/band/<%= band.id %>" class="btn btn-primary">View Profile</a>
+    <!-- Profiles Section -->
+    <div class="container">
+      <h2 class="text-center my-4">Band Profiles</h2>
+      <div class="row">
+        <div class="list-group w-100">
+          <% bands.forEach(band => { %>
+          <!-- Individual Band Profile -->
+          <div class="list-group-item d-flex align-items-center mb-3">
+            <img src="/uploads/images/<%= band.profile_picture || 'default-artist.jpg' %>" 
+                 alt="<%= band.name %>" class="img-thumbnail mr-3" style="width: 180px; height: 180px">
+            <div style="padding-left: 30px;">
+              <h5 class="mb-1"><%= band.name %></h5>
+              <p class="mb-1"><strong>Genre:</strong> <%= band.genre %></p>
+              <p class="mb-1"><strong>Members:</strong> <%= band.members %></p>
+              <p class="mb-1"><strong>Location:</strong> Bangalore</p>
+              <p class="mb-1"><%= band.description || 'No description available.' %></p>
+              <a href="/band/<%= band.id %>" class="btn btn-primary mt-2">Go to Profile</a>
             </div>
           </div>
+          <% }); %>
         </div>
-      <% }); %>
+      </div>
     </div>
-  </div>
-
-  <!-- Footer Section -->
-  <footer class="bg-dark text-white py-4 mt-5">
-    <div class="container text-center">
-      <p>&copy; 2024 Semitones. All rights reserved.</p>
-      <ul class="nav justify-content-center">
-        <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-facebook"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-twitter"></i></a></li>
-        <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-instagram"></i></a></li>
-      </ul>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76A2Fq5ROQ05NvGx6GmzQ10uDhtL0uVxCEN7aOg1Fu+aVb5HnQ1gHftJo2tFaFb" crossorigin="anonymous"></script>
-</body>
+    
+    
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white py-4 mt-5">
+      <div class="container text-center">
+        <p>&copy; 2024 Semitones. All rights reserved.</p>
+        <ul class="nav justify-content-center">
+          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-facebook"></i></a></li>
+          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-twitter"></i></a></li>
+          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-instagram"></i></a></li>
+        </ul>
+      </div>
+    </footer>
+  </body>
 </html>

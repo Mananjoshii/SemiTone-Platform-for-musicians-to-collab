@@ -9,6 +9,8 @@
   </title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="userprofile.css">
   <style>
     .reviews {
       margin-top: 40px;
@@ -22,14 +24,18 @@
     }
 
     .review {
-      background-color: #f9f9f9;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+      margin-bottom: 25px;
       padding: 20px;
-      display: flex;
-      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .review:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
 
     .review-header {
@@ -51,18 +57,19 @@
 
     .review-header .rating span {
       color: #FFD700;
-      font-size: 18px;
+      font-size: 20px;
       margin-left: 5px;
     }
 
     .review-body p {
       margin-top: 10px;
       font-size: 16px;
-      color: #555;
+      color: #444;
+      line-height: 1.5;
     }
 
     .review-body p strong {
-      color: #333;
+      color: #222;
     }
 
     /* Responsive Design for Review Cards */
@@ -82,6 +89,7 @@
 
     .img-thumbnail {
       border-radius: 50px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
     .dashboard-container {
@@ -94,17 +102,33 @@
       object-fit: cover;
       border-radius: 50%;
       margin-bottom: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 
     .card {
       margin-bottom: 20px;
-      border-radius: 20px;
+      border-radius: 15px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
 
     .list-group-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      background-color: #f8f9fa;
+      border: none;
+      padding: 15px;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    .list-group-item:hover {
+      background-color: #e8f4ff;
+      cursor: pointer;
     }
 
     footer {
@@ -120,15 +144,14 @@
       padding: 0;
       margin: 20px 0;
       border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
       overflow: hidden;
     }
 
     .professional.details li,
     .list-group-item {
       padding: 15px;
-      border-bottom: 1px solid #ddd;
       font-family: Arial, sans-serif;
       font-size: 16px;
       color: #333;
@@ -142,7 +165,6 @@
     .professional.details li:hover,
     .list-group-item:hover {
       background-color: #eef6ff;
-      cursor: pointer;
     }
 
     .band-members img {
@@ -151,6 +173,215 @@
       object-fit: cover;
       border-radius: 50%;
       margin-right: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    a,
+    .focused-element {
+      text-decoration: none;
+      outline: none;
+    }
+
+    header {
+      background-color: #110d0a;
+      /* Dark background for contrast */
+      color: #f9c846;
+      /* Light text color */
+      padding: 10px 20px;
+      /* Minimal padding to reduce height */
+      display: flex;
+      /* Flexbox for alignment */
+      justify-content: space-between;
+      /* Space between elements */
+      align-items: center;
+      /* Center vertically */
+      border-bottom: 2px solid #f9c846;
+      /* Add a bottom border for separation */
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      /* Adjust font size */
+      margin: 0;
+      /* Remove extra margin */
+      line-height: 1.2;
+      /* Reduce spacing between lines */
+    }
+
+    header nav a {
+      margin: 0 10px;
+      color: #f9c846;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    header nav a:hover {
+      color: #ffd369;
+    }
+
+    html,
+    body {
+      height: 100%;
+      /* Ensures full height for the page */
+      margin: 0;
+      /* Removes any default margins */
+    }
+
+    .container {
+      padding: 0;
+      /* Ensure the container uses full width */
+    }
+
+    html,
+    body {
+      height: 100%;
+      /* Ensures full height for the page */
+      margin: 0;
+      /* Removes any default margins */
+    }
+
+    footer {
+      background-color: #110d0a;
+      /* Dark background for the footer */
+      color: #f9f9f9;
+      /* Light text color */
+      text-align: center;
+      /* Center-align text */
+      padding: 20px 0;
+      /* Adjust padding */
+      border-top: 2px solid #f9c846;
+      /* Add a top border for distinction */
+      width: 100%;
+      /* Ensures full width */
+      position: relative;
+      bottom: 0;
+      /* Ensures footer stays at the bottom */
+      left: 0;
+      /* Makes sure it starts at the left edge of the screen */
+    }
+
+    footer .footer-content {
+      width: 100%;
+      /* Ensure content takes full width */
+      max-width: 1200px;
+      /* Optional: limit the content width to prevent it from being too stretched */
+      margin: 0 auto;
+      /* Centers the content horizontally */
+    }
+
+    footer p {
+      margin: 0;
+      /* Removes default margin */
+    }
+
+    footer a {
+      color: #f2f0ea;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #e5e3de;
+      /* Change color on hover */
+    }
+
+    footer .nav {
+      list-style: none;
+      /* Removes default list style */
+      padding: 0;
+      margin: 10px 0 0;
+    }
+
+    footer .nav-item {
+      display: inline-block;
+      margin: 0;
+    }
+
+    footer .nav-link {
+      color: #f9f9f9;
+      /* Light color for the social media links */
+      font-size: 20px;
+      /* Adjust font size for icons */
+    }
+
+    footer .nav-link:hover {
+      color: #ffd369;
+      /* Change color when hovered */
+    }
+
+
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      /* Adjust based on layout needs */
+      width: 100%;
+    }
+
+    .semitone-gif {
+      max-height: 50px;
+      /* Adjust according to your design */
+      margin-right: 15px;
+      /* Space between gif and button */
+    }
+
+    .logout-btn {
+      margin-left: auto;
+      /* This will push the button to the right */
+    }
+
+    .followers-section {
+
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background-color: #f8f9fa;
+      /* Light gray background for contrast */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      /* Subtle shadow for depth */
+      border-radius: 10px;
+      /* Rounded corners */
+      padding: 20px;
+      /* Spacing inside the card */
+      /* Full width in flex container */
+      /* Restrict maximum width */
+      width: 23px;
+      /* Automatic height based on content */
+      margin: 0 auto;
+      /* Center alignment */
+    }
+
+    .followers-section h5 {
+      font-size: 1.5rem;
+      /* Larger title font size */
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .followers-section p {
+      font-size: 1.25rem;
+      /* Slightly larger font for followers count */
+      margin: 10px 0;
+    }
+
+    .followers-section button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      /* Bootstrap primary blue */
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .followers-section button:hover {
+      background-color: #0056b3;
+      /* Darker blue on hover */
+      transition: background-color 0.3s ease;
     }
   </style>
 </head>
@@ -161,165 +392,145 @@
     <div class="container">
       <span class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-          <img src="/SEMITONE_LOGO.gif" alt="MusicHub Logo" width="200">
-        </a>
-      </span>
-      <a href="/logout" class="btn btn-danger" style="margin-left: 93%;">Logout</a>
+          <div class="header-container">
+            <img src="/SEMITONE_LOGO.gif" alt="Semitone" class="semitone-gif">
+            <a href="/logout" class="btn btn-danger logout-btn">Logout</a>
+          </div>
+
     </div>
   </header>
 
   <!-- Dashboard Section -->
   <div class="dashboard-container container">
-    <% if (user.role==='musician' ) { %>
-      <!-- Musician Dashboard -->
-      <div class="row">
-        <!-- Profile Section -->
-        <div class="col-lg-3 col-md-4 mb-4">
-          <div class="card text-center">
-            <div class="card-body">
-              <img src="/uploads/images/<%= user.profile_picture %>" alt="Profile Picture" class="img-thumbnail mb-3">
-              <h5 class="card-title">
-                <%= user.name %>
-              </h5>
-              <p class="text-muted mb-3">Musician | <%= user.instrument %>
-              </p>
-            </div>
+
+    <!-- Musician Dashboard -->
+    <div class="row">
+      <!-- Profile Section -->
+      <div class="col-lg-3 col-md-4 mb-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <img src="/uploads/images/<%= user.profile_picture %>" alt="Profile Picture" class="img-thumbnail mb-3">
+            <h5 class="card-title">
+              <%= user.name %>
+            </h5>
+            <p class="text-muted mb-3">Musician | <%= user.instrument %>
+                <div class="reviews">
+                  <h2>Reviews</h2>
+                  <div id="reviewsContainer">
+                    <!-- Reviews will be displayed here -->
+                  </div>
+                </div>
+            </p>
           </div>
         </div>
+      </div>
 
-        <!-- Main Content Section -->
-        <div class="col-lg-6 col-md-8">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">User Information:</h5>
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item"><strong>Email:</strong>
-                  <%= user.email %>
-                </li>
-              </ul>
-            </div>
+      <!-- Main Content Section -->
+      <div class="col-lg-6 col-md-8">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">User Information:</h5>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><strong>Email:</strong>
+                <%= user.email %>
+              <li class="list-group-item"><strong>Social Media Links:</strong>
+                <a href="https://www.instagram.com"><img src="Instagram.png" style="height: 20px;"></a>
+                <a href="https://www.facebook.com"><img src="downloadfb.png" style="height: 20px;"></a>
+              </li>
+            </ul>
           </div>
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Professional Details:</h5>
-              <ul class="professional details">
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Professional Details:</h5>
+            <ul class="professional details">
+
+              <li class="experience">
+                <strong>Experience:</strong>
                 <%= user.description %>
-              </ul>
-            </div>
+
+              </li>
+            </ul>
           </div>
         </div>
       </div>
+    </div>
+    <div class="followers">
+      <div class="card">
+        <h5 class="card-title">Followers</h5>
+        <p id="followersCount" class="h4">Loading...</p>
+        <button id="followButton" class="btn btn-primary">Follow</button>
+      </div>
+    </div>
 
-      <!-- Rating and Reviews Section -->
-      <section class="container my-4">
-        <h2 class="mb-4">User Posts</h2>
-        <div class="row g-3">
-          <div class="col-md-4">
-            <div class="card">
-              <video src="/uploads/videos/<%= user.video %>" controls></video>
-              <div class="card-body">
-                <h5 class="card-title">Sample Title</h5>
-                <p class="card-text">Sample Description</p>
-              </div>
+    <section class="container my-4">
+      <h2 class="mb-4">User Posts</h2>
+      <div class="row g-3">
+        <!-- Post 1 -->
+        <div class="col-md-4">
+          <div class="card">
+            <video src="/uploads/videos/<%= user.video %>" controls></video>
+            <div class="card-body">
+              <h5 class="card-title">Acoustic Vibes</h5>
+              <p class="card-text">A soothing new track with a mix of relaxing melodies and acoustic guitar.</p>
             </div>
           </div>
         </div>
-        <h2 class="mb-4">Rate This Musician</h2>
-        <form id="ratingForm">
-          <input type="hidden" id="musicianId" value="<%= musicianId %>">
-          <input type="hidden" id="userId" value="<%= userId %>">
-          
-          <label for="rating">Rating:</label>
-          <select id="rating" required>
-            <option value="">Select a rating</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-          
-          <label for="comment">Comment:</label>
-          <textarea id="comment" rows="4" placeholder="Write your review here..." required></textarea>
-          
-          <button type="submit">Submit Rating</button>
+        <section class="container my-5">
+          <h2 class="mb-4">Leave a Review</h2>
+          <div class="card">
+            <div class="card-body">
+              <form action="#" method="post">
+                <div class="mb-3">
+                  <form id="ratingForm">
+                    <input type="hidden" id="musicianId" value="<%= user.id %>">
+                    <input type="hidden" id="userId" value="<%= user.id %>">
+                    <label for="rating">Rating:</label>
+                    <select id="rating" required>
+                      <option value="">Select a rating</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                  <label for="comment" class="form-label">Your Review</label>
+                  <textarea class="form-control" id="comment" name="comment" rows="4"
+                    placeholder="Write your review here..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+              </form>
+            </div>
+          </div>
+        </section>
         </form>
-        
-      </section>
+
+    </section>
 
 
-      <div class="reviews">
-        <h2>Reviews</h2>
-        <div id="reviewsContainer">
-          <!-- Reviews will be displayed here -->
-        </div>
+    <div class="reviews">
+      <h2>Reviews</h2>
+      <div id="reviewsContainer">
+        <!-- Reviews will be displayed here -->
       </div>
+    </div>
+    <!-- Footer Section -->
 
 
-      <% } else if (user.role==='band_member' ) { %>
-        <!-- Band Member Dashboard -->
-        <h1>BAND PROFILE PAGE</h1>
-        <div class="row">
-          <!-- Band Profile Section -->
-          <div class="col-lg-3 col-md-4 mb-4">
-            <div class="card text-center">
-              <div class="card-body">
-                <img src="/uploads/images/<%= band.profile_picture %>" alt="Band Profile Picture"
-                  class="img-thumbnail mb-3">
-                <h5 class="card-title">
-                  <%= band.name %>
-                </h5>
-                <p class="text-muted mb-3">
-                  <%= band.genre %>
-                </p>
-              </div>
-            </div>
-          </div>
+    <footer class="bg-dark text-white py-4 mt-5">
+      <div class="footer-content text-center">
+        <p>&copy; 2024 Semitones. All rights reserved.</p>
+        <ul class="nav justify-content-center">
+          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-facebook"></i></a></li>
+          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-twitter"></i></a></li>
+          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-instagram"></i></a></li>
+        </ul>
+      </div>
+    </footer>
 
-          <!-- Main Content Section -->
-          <div class="col-lg-6 col-md-8">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Band Information:</h5>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item"><strong>Email:</strong>
-                    <%= band.email %>
-                  </li>
-                  <li class="list-group-item"><strong>About:</strong>
-                    <%= band.description %>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Band Members:</h5>
-                <ul class="list-group band-members">
-                  <% band.members.forEach(member=> { %>
-                    <li class="list-group-item">
-                      <div>
-                        <img src="/uploads/images/<%= member.profile_picture %>" alt="Member Picture">
-                        <strong>
-                          <%= member.name %>
-                        </strong> - <%= member.instrument %>
-                      </div>
-                      <a href="/profile/<%= member.id %>" class="btn btn-outline-primary btn-sm">View Profile</a>
-                    </li>
-                    <% }); %>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <% } %>
-  </div>
-
-  <!-- Footer Section -->
-  <footer>
-    <p>© 2024 MusicHub. All Rights Reserved.</p>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
 
@@ -334,31 +545,28 @@
     }
 
     async function loadMusicianData() {
-    const musicianId = document.getElementById('musicianId').value;
-
-    try {
-      // Fetch reviews for the musician
-      const reviewsResponse = await fetch(`${API_URL}/ratings/${musicianId}/reviews`);
-      const reviewsData = await reviewsResponse.json();
-
-      // Check if reviews are found
-      if (reviewsData.length > 0) {
-        // Display reviews
-        const reviewsContainer = document.getElementById('reviewsContainer');
-        reviewsContainer.innerHTML = reviewsData.map(review => `
-          <div class="review">
-            <p>Rated this musician ${generateStars(review.rating)}</p>
-            <p>Reviews- ${review.comment}</p>
-          </div>
-        `).join('');
-      } else {
-        document.getElementById('reviewsContainer').innerHTML = '<p>No reviews yet.</p>';
-      }
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
+      const musicianId = document.getElementById('musicianId').value;
+  try {
+    // Fetch reviews for the musician
+    const reviewsResponse = await fetch(`${API_URL}/ratings/${musicianId}/reviews`);
+    const reviewsData = await reviewsResponse.json();
+    // Check if reviews are found
+    if (reviewsData.length > 0) {
+      // Display reviews
+      const reviewsContainer = document.getElementById('reviewsContainer');
+      reviewsContainer.innerHTML = reviewsData.map(review => `
+        <div class="review">
+          <p><strong>${review.username}</strong> rated this musician ${review.rating} stars</p>
+          <p>${review.comment}</p>
+        </div>
+      `).join('');
+    } else {
+      document.getElementById('reviewsContainer').innerHTML = '<p>No reviews yet.</p>';
     }
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
   }
-
+}
     // Rating Form Submission
 
     const ratingForm = document.getElementById('ratingForm');

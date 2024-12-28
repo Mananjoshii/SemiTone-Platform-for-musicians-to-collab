@@ -1,0 +1,121 @@
+.list-group-item {
+    margin-bottom: 20px;  
+    padding: 20px;  
+    border-radius: 15px;  
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.list-group-item img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    margin-right: 20px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.btn {
+    margin-top: 10px;
+}
+
+footer {
+    background-color: black;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1); 
+    border-top: 2px solid white; 
+}
+
+footer .nav {
+    justify-content: center;
+}
+
+footer .nav-link {
+    color: white;
+    padding: 0 10px;
+}
+
+footer .nav-link:hover {
+    color: #ddd;
+}
+
+  .list-group-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    border: none;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.1); /* Optional semi-transparent effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .list-group-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .list-group-item img {
+    transition: transform 0.3s ease;
+    border-radius: 10px;
+  }
+
+  .list-group-item:hover img {
+    transform: scale(1.05);
+  }
+
+  .btn {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .btn:hover {
+    background-color: #ffc107;
+    transform: scale(1.1);
+  }
+/* Header styling */
+/* Header Styling */
+header {
+  padding: 10px 0; /* Padding for better spacing */
+  background-color: black; /* Black background */
+  color: white; /* White text */
+  border-bottom: 1px solid #444; /* Subtle bottom border */
+}
+
+/* Flex Container */
+header .container {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  justify-content: space-between; /* Separate logo and search bar */
+}
+
+/* Search Bar Styling */
+form[role="search"] {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Spacing between input and button */
+}
+
+form[role="search"] .form-control {
+  width: 300px; /* Fixed width for the input field */
+  border-radius: 5px; /* Rounded corners */
+}
+
+form[role="search"] .btn {
+  background-color: #007bff; /* Bootstrap primary color */
+  border: none; /* Remove border */
+  color: white; /* Button text color */
+}
+
+form[role="search"] .btn:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  form[role="search"] .form-control {
+    width: 100%; /* Full width for smaller screens */
+  }
+}
+
+
