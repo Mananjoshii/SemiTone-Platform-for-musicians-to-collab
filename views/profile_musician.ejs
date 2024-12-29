@@ -12,94 +12,131 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
   <style>
-.rating-stars {
-  display: flex;
-  justify-content: center;
-  gap: 10px; /* Space between stars */
-}
+    .my-5 {
+      margin-top: 0px;
+      margin-bottom: 2rem !important;
+      width: 315px;
+      margin-left: 5px;
+      padding-top: 0px;
+      height: 30px;
 
-.rating-stars input {
-  display: none; /* Hide radio buttons */
-}
 
-.rating-stars label {
-  width: 40px; /* Size of each star */
-  height: 40px;
-  font-size: 30px; /* Size of the stars */
-  color: #ccc; /* Default color for unselected stars */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: color 0.2s ease-in-out;
-}
+    }
 
-.rating-stars label:before {
-  content: '★'; /* Use star symbol */
-}
+    @media (max-width: 768px) {
+      .card {
+        margin-bottom: 15px;
+      }
 
-/* When a radio button is checked, change the color of the corresponding star */
-.rating-stars input:checked + label {
-  color: gold; /* Selected star color */
-}
+      .followers-section {
+        flex-direction: column;
+        padding: 15px;
+      }
+    }
 
-/* Hover effect to show preview of rating */
-.rating-stars label:hover,
-.rating-stars label:hover ~ label {
-  color: #ffffff; /* Hover effect (gold) */
-}
+    .rating-stars {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      /* Space between stars */
+    }
 
-/* Apply hover color up to the current hovered star */
-.rating-stars label:hover {
-  color: #ffd700;
-}
+    .rating-stars input {
+      display: none;
+      /* Hide radio buttons */
+    }
 
-.rating-stars input:checked ~ label {
-  color: gold; /* Color of stars when selected */
-}
+    .rating-stars label {
+      width: 40px;
+      /* Size of each star */
+      height: 40px;
+      font-size: 30px;
+      /* Size of the stars */
+      color: #ccc;
+      /* Default color for unselected stars */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: color 0.2s ease-in-out;
+    }
 
-.stars-container {
-  display: flex;
-  justify-content: center; /* Center stars horizontally */
-  align-items: center;    /* Center stars vertically */
-  gap: 4px;               /* Spacing between stars */
-  margin-top: 8px;        /* Optional spacing from other content */
-}
+    .rating-stars label:before {
+      content: '★';
+      /* Use star symbol */
+    }
 
-.star {
-  width: 32px;                     /* Larger size for better visuals */
-  height: 32px;
-  background: linear-gradient(to right, #ccc 100%, #ccc 0%);
-  clip-path: polygon(
-    50% 0%,
-    61% 35%,
-    98% 35%,
-    68% 57%,
-    79% 91%,
-    50% 70%,
-    21% 91%,
-    32% 57%,
-    2% 35%,
-    39% 35%
-  );
-  position: relative;              /* Required for gradient precision */
-}
+    /* When a radio button is checked, change the color of the corresponding star */
+    .rating-stars input:checked+label {
+      color: gold;
+      /* Selected star color */
+    }
 
-.average-rating-card {
-  padding: 1em;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin: 1em 0;
-  text-align: center;
-  background-color: #f9f9f9;
-}
+    /* Hover effect to show preview of rating */
+    .rating-stars label:hover,
+    .rating-stars label:hover~label {
+      color: #ffffff;
+      /* Hover effect (gold) */
+    }
 
-.stars {
-  display: flex;                   /* Ensures stars render properly */
-  justify-content: center;         /* Center content inside the stars div */
-  color: gold;
-  font-size: 1.5em;
-}
+    /* Apply hover color up to the current hovered star */
+    .rating-stars label:hover {
+      color: #ffd700;
+    }
+
+    .rating-stars input:checked~label {
+      color: gold;
+      /* Color of stars when selected */
+    }
+
+    .stars-container {
+      display: flex;
+      justify-content: center;
+      /* Center stars horizontally */
+      align-items: center;
+      /* Center stars vertically */
+      gap: 4px;
+      /* Spacing between stars */
+      margin-top: 8px;
+      /* Optional spacing from other content */
+    }
+
+    .star {
+      width: 32px;
+      /* Larger size for better visuals */
+      height: 32px;
+      background: linear-gradient(to right, #ccc 100%, #ccc 0%);
+      clip-path: polygon(50% 0%,
+          61% 35%,
+          98% 35%,
+          68% 57%,
+          79% 91%,
+          50% 70%,
+          21% 91%,
+          32% 57%,
+          2% 35%,
+          39% 35%);
+      position: relative;
+      /* Required for gradient precision */
+    }
+
+    .average-rating-card {
+      padding: 1em;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin: 1em 0;
+      text-align: center;
+      background-color: #f9f9f9;
+    }
+
+    .stars {
+      display: flex;
+      /* Ensures stars render properly */
+      justify-content: center;
+      /* Center content inside the stars div */
+      color: gold;
+      font-size: 1.5em;
+    }
 
 
     .reviews {
@@ -494,6 +531,7 @@
   <div class="dashboard-container container">
 
     <!-- Musician Dashboard -->
+
     <div class="row">
       <!-- Profile Section -->
       <div class="col-lg-3 col-md-4 mb-4">
@@ -511,9 +549,17 @@
                   </div>
                 </div>
             </p>
+            <div class="followers">
+              <div class="card">
+                <h5 class="card-title"></h5>
+                <p id="followersCount" class="h4"></p>
+                <button id="followButton" class="btn btn-primary">Follow</button>
+              </div>
+            </div>
+          </div>
           </div>
         </div>
-      </div>
+        
 
       <!-- Main Content Section -->
       <div class="col-lg-6 col-md-8">
@@ -547,42 +593,11 @@
             </ul>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="followers">
-      <div class="card">
-        <h5 class="card-title">Followers</h5>
-        <p id="followersCount" class="h4">Loading...</p>
-        <button id="followButton" class="btn btn-primary">Follow</button>
-      </div>
-    </div>
-
-    <section class="container my-4">
-      <h2 class="mb-4">User Posts</h2>
-      <div class="row g-3">
-        <!-- Post 1 -->
-        <div class="col-md-4">
-          <div class="card">
-            <video src="/uploads/videos/<%= user.video %>" controls></video>
-            <div class="card-body">
-              <h5 class="card-title">Acoustic Vibes</h5>
-              <p class="card-text">A soothing new track with a mix of relaxing melodies and acoustic guitar.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12 text-center mt-4">
-          <a href="/add-post-form" class="btn btn-primary btn-lg" id="addPostButton">
-            <i class="fas fa-plus"></i> Add New Post
-          </a>
-        </div>
-
-
-
-
         <section class="container my-5">
-          <h2 class="mb-4">Leave a Review</h2>
+
           <div class="card">
             <div class="card-body">
+              <h2 class="mb-4">Leave a review</h2>
               <form id="ratingForm" action="/submitReview" method="post">
                 <input type="hidden" id="musicianId" name="musicianId" value="<%= user.id %>">
                 <input type="hidden" id="userId" name="userId" value="<%= user.id %>">
@@ -592,126 +607,168 @@
                   <div class="rating-stars">
                     <input type="radio" id="star1" name="rating" value="1">
                     <label for="star1" class="star" title="1 star"></label>
-                
+
                     <input type="radio" id="star2" name="rating" value="2">
                     <label for="star2" class="star" title="2 stars"></label>
-                
+
                     <input type="radio" id="star3" name="rating" value="3">
                     <label for="star3" class="star" title="3 stars"></label>
-                
+
                     <input type="radio" id="star4" name="rating" value="4">
                     <label for="star4" class="star" title="4 stars"></label>
-                
+
                     <input type="radio" id="star5" name="rating" value="5">
                     <label for="star5" class="star" title="5 stars"></label>
                   </div>
                 </div>
-                
-                
+
+
 
                 <div class="mb-3">
-                  <label for="comment" class="form-label">Your Review</label>
-                  <textarea class="form-control" id="comment" name="comment" rows="4"
-                    placeholder="Write your review here..." required></textarea>
+                  <label for="comment" class="form-label"></label>
+                  <textarea class="form-control" id="comment" name="comment" rows="4" placeholder=""></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Submit Review</button>
               </form>
             </div>
           </div>
+          
       </div>
-    </section>
-    </form>
 
-    </section>
+      </section>
 
-
-    <div class="reviews">
-      <h2>Reviews</h2>
-      <div id="reviewsContainer">
-        <!-- Reviews will be displayed here -->
-      </div>
     </div>
-    <!-- Footer Section -->
+
+  </div>
 
 
-    <footer class="bg-dark text-white py-4 mt-5">
-      <div class="footer-content text-center">
-        <p>&copy; 2024 Semitones. All rights reserved.</p>
-        <ul class="nav justify-content-center">
-          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-facebook"></i></a></li>
-          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-twitter"></i></a></li>
-          <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-instagram"></i></a></li>
-        </ul>
+
+
+
+
+
+
+
+  <section class="container my-4">
+    <h2 class="mb-4">User Posts</h2>
+    <div class="row g-3">
+      <!-- Post 1 -->
+      <div class="col-md-4">
+        <div class="card">
+          <video src="/uploads/videos/<%= user.video %>" controls></video>
+          <div class="card-body">
+            <h5 class="card-title">Acoustic Vibes</h5>
+            <p class="card-text">A soothing new track with a mix of relaxing melodies and acoustic guitar.</p>
+          </div>
+        </div>
       </div>
-    </footer>
+      <div class="col-md-12 text-center mt-4">
+        <a href="/add-post-form" class="btn btn-primary btn-lg" id="addPostButton">
+          <i class="fas fa-plus"></i> Add New Post
+        </a>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-      </script>
 
-    <script>
-     const API_URL = 'http://localhost:3000'; // Replace with your backend URL
 
-// Function to render stars for ratings
-function generateStars(rating) {
-  const starsContainer = document.createElement('div');
-  starsContainer.className = 'stars-container';
 
-  for (let i = 1; i <= 5; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
 
-    if (i <= Math.floor(rating)) {
-      star.style.background = 'linear-gradient(to right, gold 100%, #ccc 0%)'; // Full star
-    } else if (i - rating <= 0.5) {
-      const percentage = Math.round((rating % 1) * 100); // Calculate fractional fill
-      star.style.background = `linear-gradient(to right, gold ${percentage}%, #ccc ${percentage}%)`; // Partial star
-    } else {
-      star.style.background = 'linear-gradient(to right, #ccc 100%, #ccc 0%)'; // Empty star
+      </form>
+
+  </section>
+
+
+  <!-- <div class="reviews">
+      <h2>Reviews</h2>
+      <div id="reviewsContainer"> 
+         Reviews will be displayed here -->
+  <!-- </div>
+    </div>  -->
+
+
+  <!-- Footer Section -->
+
+
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="footer-content text-center">
+      <p>&copy; 2024 Semitones. All rights reserved.</p>
+      <ul class="nav justify-content-center">
+        <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-facebook"></i></a></li>
+        <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-twitter"></i></a></li>
+        <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-instagram"></i></a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+
+  <script>
+    const API_URL = 'http://localhost:3000'; // Replace with your backend URL
+
+    // Function to render stars for ratings
+    function generateStars(rating) {
+      const starsContainer = document.createElement('div');
+      starsContainer.className = 'stars-container';
+
+      for (let i = 1; i <= 5; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+
+        if (i <= Math.floor(rating)) {
+          star.style.background = 'linear-gradient(to right, gold 100%, #ccc 0%)'; // Full star
+        } else if (i - rating <= 0.5) {
+          const percentage = Math.round((rating % 1) * 100); // Calculate fractional fill
+          star.style.background = `linear-gradient(to right, gold ${percentage}%, #ccc ${percentage}%)`; // Partial star
+        } else {
+          star.style.background = 'linear-gradient(to right, #ccc 100%, #ccc 0%)'; // Empty star
+        }
+
+        starsContainer.appendChild(star);
+      }
+
+      return starsContainer.outerHTML; // Return HTML as a string
     }
 
-    starsContainer.appendChild(star);
-  }
-
-  return starsContainer.outerHTML; // Return HTML as a string
-}
 
 
+    async function fetchReviews(musicianId) {
+      try {
+        const response = await fetch(`${API_URL}/reviews/${musicianId}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
 
-async function fetchReviews(musicianId) {
-  try {
-    const response = await fetch(`${API_URL}/reviews/${musicianId}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
+        if (data.success) {
+          const reviewsContainer = document.getElementById('reviewsContainer');
+          reviewsContainer.innerHTML = ''; // Clear previous content
 
-    if (data.success) {
-      const reviewsContainer = document.getElementById('reviewsContainer');
-      reviewsContainer.innerHTML = ''; // Clear previous content
-
-      // Create a single card for average rating
-      const averageRatingElement = document.createElement('div');
-      averageRatingElement.className = 'average-rating-card';
-      averageRatingElement.innerHTML = `
+          // Create a single card for average rating
+          const averageRatingElement = document.createElement('div');
+          averageRatingElement.className = 'average-rating-card';
+          averageRatingElement.innerHTML = `
         <p>Rating: <span class="stars">${generateStars(data.averageRating)}</span> (${data.averageRating} / 5)</p>
         <p>Total Reviews: ${data.reviewCount}</p>
+        
       `;
-      reviewsContainer.appendChild(averageRatingElement);
+          reviewsContainer.appendChild(averageRatingElement);
+
+
+        }
+      } catch (err) {
+        console.error('Error fetching reviews:', err.message);
+      }
     }
-  } catch (err) {
-    console.error('Error fetching reviews:', err.message);
-  }
-}
 
-// Fetch reviews and average rating on page load
-document.addEventListener('DOMContentLoaded', () => {
-  const musicianId = document.getElementById('musicianId').value;
-  fetchReviews(musicianId);
-});
+    // Fetch reviews and average rating on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const musicianId = document.getElementById('musicianId').value;
+      fetchReviews(musicianId);
+    });
 
-    </script>
+  </script>
 </body>
 
 </html>
