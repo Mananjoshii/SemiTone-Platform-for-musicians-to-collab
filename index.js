@@ -666,26 +666,36 @@ app.post('/submitReview', async (req, res) => {
 // Route to fetch reviews for a musician
 app.get('/reviews/:musicianId', async (req, res) => {
     const { musicianId } = req.params;
-
+  
     try {
-        const query = `
-            SELECT r.*, u.name AS user_name
-            FROM reviews r
-            JOIN users u ON r.user_id = u.id
-            WHERE r.musician_id = $1
-            ORDER BY r.created_at DESC;
-          `;
-        const result = await db.query(query, [musicianId]);
-
-        res.status(200).json({
-            success: true,
-            reviews: result.rows,
-        });
+      // Fetch reviews and calculate the average rating
+      const reviewsQuery = `
+        SELECT r.*, u.name AS user_name
+        FROM reviews r
+        JOIN users u ON r.user_id = u.id
+        WHERE r.musician_id = $1
+        ORDER BY r.created_at DESC;
+      `;
+      const reviewsResult = await db.query(reviewsQuery, [musicianId]);
+  
+      const averageQuery = `
+        SELECT COALESCE(AVG(rating), 0) AS average_rating
+        FROM reviews
+        WHERE musician_id = $1;
+      `;
+      const averageResult = await db.query(averageQuery, [musicianId]);
+  
+      res.status(200).json({
+        success: true,
+        reviews: reviewsResult.rows,
+        averageRating: parseFloat(averageResult.rows[0].average_rating).toFixed(1),
+      });
     } catch (err) {
-        console.error('Error fetching reviews:', err.message);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+      console.error('Error fetching reviews:', err.message);
+      res.status(500).json({ success: false, message: 'Internal server error' });
     }
-});
+  });
+  
 
 
 

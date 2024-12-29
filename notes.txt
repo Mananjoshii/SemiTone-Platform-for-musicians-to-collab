@@ -61,3 +61,7 @@ CREATE TABLE bands (
  obdknkztieqmttbk
 
  <%= artist.description || 'No description available.' %>
+
+<p><strong>${review.user_name}</strong></p>
+<p>${review.comment}</p>
+          <small>${new Date(review.created_at).toLocaleString()}</small>

@@ -12,6 +12,18 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
   <style>
+    .average-rating {
+      margin-bottom: 1em;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: gold;
+    }
+
+    .stars {
+      color: gold;
+      font-size: 1.2em;
+    }
+
     .reviews {
       margin-top: 40px;
     }
@@ -553,42 +565,49 @@
     <script>
       const API_URL = 'http://localhost:3000'; // Replace with your backend URL
 
+      // Function to render stars for ratings
+      function generateStars(rating) {
+        const fullStar = '★'; // Full star
+        const emptyStar = '☆'; // Empty star
+        let stars = '';
+
+        for (let i = 1; i <= 5; i++) {
+          stars += i <= Math.round(rating) ? fullStar : emptyStar;
+        }
+
+        return stars;
+      }
+
       async function fetchReviews(musicianId) {
-  try {
-    const response = await fetch(`/reviews/${musicianId}`);
-    const data = await response.json();
+        try {
+          const response = await fetch(`${API_URL}/reviews/${musicianId}`);
+          const data = await response.json();
 
-    if (data.success) {
-      const reviewsContainer = document.getElementById('reviewsContainer');
-      reviewsContainer.innerHTML = '';
+          if (data.success) {
+            const reviewsContainer = document.getElementById('reviewsContainer');
+            reviewsContainer.innerHTML = '';
 
-      data.reviews.forEach((review) => {
-        const reviewElement = document.createElement('div');
-        reviewElement.className = 'review';
-        reviewElement.innerHTML = `
-          <strong>${review.user_name}</strong>
-          <p>Rating: ${review.rating}</p>
-          <p>${review.comment}</p>
-          <small>${new Date(review.created_at).toLocaleString()}</small>
+            // Display all reviews (optional, for details)
+            data.reviews.forEach((review) => {
+              const reviewElement = document.createElement('div');
+              reviewElement.className = 'review';
+              reviewElement.innerHTML = `
+          
+          <p>Rating: <span class="stars">${generateStars(review.rating)}</span></p>
+          
         `;
-        reviewsContainer.appendChild(reviewElement);
-      });
-    }
-  } catch (err) {
-    console.error('Error fetching reviews:', err.message);
-  }
-}
+              reviewsContainer.appendChild(reviewElement);
+            });
+          }
+        } catch (err) {
+          console.error('Error fetching reviews:', err.message);
+        }
+      }
 
-// Call the function to fetch reviews on page load
-document.addEventListener('DOMContentLoaded', () => {
-  const musicianId = document.getElementById('musicianId').value;
-  fetchReviews(musicianId);
-});
-
-
-      document.getElementById("addPostButton").addEventListener("click", () => {
-        const form = document.getElementById("newPostForm");
-        form.style.display = form.style.display === "none" || !form.style.display ? "block" : "none";
+      // Call the function to fetch reviews on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        const musicianId = document.getElementById('musicianId').value;
+        fetchReviews(musicianId);
       });
 
     </script>
