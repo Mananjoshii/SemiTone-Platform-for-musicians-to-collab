@@ -12,17 +12,20 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
   <style>
-    .average-rating {
-      margin-bottom: 1em;
-      font-size: 1.5em;
-      font-weight: bold;
-      color: gold;
-    }
+    .average-rating-card {
+  padding: 1em;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 1em 0;
+  text-align: center;
+  background-color: #f9f9f9;
+}
 
-    .stars {
-      color: gold;
-      font-size: 1.2em;
-    }
+.stars {
+  color: gold;
+  font-size: 1.5em;
+}
+
 
     .reviews {
       margin-top: 40px;
@@ -563,52 +566,60 @@
       </script>
 
     <script>
-      const API_URL = 'http://localhost:3000'; // Replace with your backend URL
+     const API_URL = 'http://localhost:3000'; // Replace with your backend URL
 
-      // Function to render stars for ratings
-      function generateStars(rating) {
-        const fullStar = '★'; // Full star
-        const emptyStar = '☆'; // Empty star
-        let stars = '';
+// Function to render stars for ratings
+function generateStars(rating) {
+  const fullStar = '★'; // Full star
+  const halfStar = '⯪'; // Half star (or choose an appropriate symbol)
+  const emptyStar = '☆'; // Empty star
+  let stars = '';
 
-        for (let i = 1; i <= 5; i++) {
-          stars += i <= Math.round(rating) ? fullStar : emptyStar;
-        }
+  for (let i = 1; i <= 5; i++) {
+    if (i <= Math.floor(rating)) {
+      stars += fullStar; // Full stars
+    } else if (i - rating <= 0.5) {
+      stars += halfStar; // Half star
+    } else {
+      stars += emptyStar; // Empty stars
+    }
+  }
 
-        return stars;
-      }
+  return stars;
+}
 
-      async function fetchReviews(musicianId) {
-        try {
-          const response = await fetch(`${API_URL}/reviews/${musicianId}`);
-          const data = await response.json();
+async function fetchReviews(musicianId) {
+  try {
+    const response = await fetch(`${API_URL}/reviews/${musicianId}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
 
-          if (data.success) {
-            const reviewsContainer = document.getElementById('reviewsContainer');
-            reviewsContainer.innerHTML = '';
+    if (data.success) {
+      const reviewsContainer = document.getElementById('reviewsContainer');
+      reviewsContainer.innerHTML = ''; // Clear previous content
 
-            // Display all reviews (optional, for details)
-            data.reviews.forEach((review) => {
-              const reviewElement = document.createElement('div');
-              reviewElement.className = 'review';
-              reviewElement.innerHTML = `
-          
-          <p>Rating: <span class="stars">${generateStars(review.rating)}</span></p>
-          
-        `;
-              reviewsContainer.appendChild(reviewElement);
-            });
-          }
-        } catch (err) {
-          console.error('Error fetching reviews:', err.message);
-        }
-      }
+      // Create a single card for average rating
+      const averageRatingElement = document.createElement('div');
+      averageRatingElement.className = 'average-rating-card';
+      averageRatingElement.innerHTML = `
+        <h3>Average Rating</h3>
+        <p>Rating: <span class="stars">${generateStars(data.averageRating)}</span> (${data.averageRating} / 5)</p>
+        <p>Total Reviews: ${data.reviewCount}</p>
+      `;
+      reviewsContainer.appendChild(averageRatingElement);
+    }
+  } catch (err) {
+    console.error('Error fetching reviews:', err.message);
+  }
+}
 
-      // Call the function to fetch reviews on page load
-      document.addEventListener('DOMContentLoaded', () => {
-        const musicianId = document.getElementById('musicianId').value;
-        fetchReviews(musicianId);
-      });
+// Fetch reviews and average rating on page load
+document.addEventListener('DOMContentLoaded', () => {
+  const musicianId = document.getElementById('musicianId').value;
+  fetchReviews(musicianId);
+});
 
     </script>
 </body>

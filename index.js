@@ -668,16 +668,7 @@ app.get('/reviews/:musicianId', async (req, res) => {
     const { musicianId } = req.params;
   
     try {
-      // Fetch reviews and calculate the average rating
-      const reviewsQuery = `
-        SELECT r.*, u.name AS user_name
-        FROM reviews r
-        JOIN users u ON r.user_id = u.id
-        WHERE r.musician_id = $1
-        ORDER BY r.created_at DESC;
-      `;
-      const reviewsResult = await db.query(reviewsQuery, [musicianId]);
-  
+      // Calculate the average rating
       const averageQuery = `
         SELECT COALESCE(AVG(rating), 0) AS average_rating
         FROM reviews
@@ -685,10 +676,18 @@ app.get('/reviews/:musicianId', async (req, res) => {
       `;
       const averageResult = await db.query(averageQuery, [musicianId]);
   
+      // Get total number of reviews
+      const countQuery = `
+        SELECT COUNT(*) AS review_count
+        FROM reviews
+        WHERE musician_id = $1;
+      `;
+      const countResult = await db.query(countQuery, [musicianId]);
+  
       res.status(200).json({
         success: true,
-        reviews: reviewsResult.rows,
-        averageRating: parseFloat(averageResult.rows[0].average_rating).toFixed(1),
+        averageRating: parseFloat(averageResult.rows[0].average_rating).toFixed(2),
+        reviewCount: countResult.rows[0].review_count,
       });
     } catch (err) {
       console.error('Error fetching reviews:', err.message);
