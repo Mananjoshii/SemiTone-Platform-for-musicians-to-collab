@@ -15,12 +15,15 @@
 
 .stars-container {
   display: flex;
-  gap: 4px;
+  justify-content: center; /* Center stars horizontally */
+  align-items: center;    /* Center stars vertically */
+  gap: 4px;               /* Spacing between stars */
+  margin-top: 8px;        /* Optional spacing from other content */
 }
 
 .star {
-  width: 24px;
-  height: 24px;
+  width: 32px;                     /* Larger size for better visuals */
+  height: 32px;
   background: linear-gradient(to right, #ccc 100%, #ccc 0%);
   clip-path: polygon(
     50% 0%,
@@ -34,9 +37,10 @@
     2% 35%,
     39% 35%
   );
+  position: relative;              /* Required for gradient precision */
 }
 
-    .average-rating-card {
+.average-rating-card {
   padding: 1em;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -46,6 +50,8 @@
 }
 
 .stars {
+  display: flex;                   /* Ensures stars render properly */
+  justify-content: center;         /* Center content inside the stars div */
   color: gold;
   font-size: 1.5em;
 }
