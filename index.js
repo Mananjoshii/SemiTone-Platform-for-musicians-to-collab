@@ -199,57 +199,6 @@ app.get("/profile", isAuthenticated, (req, res) => {
 });
 
 
-// app.get('/band/:bandId', async (req, res) => {
-//     const { bandId } = req.params;
-
-//     try {
-//         // Fetch band details
-//         const bandQuery = `
-//         SELECT id, name, email, description, genre, profile_picture
-//         FROM users
-//         WHERE role = 'band_member' AND id = $1
-//       `;
-//         const bandResult = await db.query(bandQuery, [bandId]);
-
-//         if (bandResult.rowCount === 0) {
-//             return res.status(404).send("Band not found");
-//         }
-
-//         const band = bandResult.rows[0];
-
-//         // Fetch band members
-//         const membersQuery = `
-//         SELECT id, name, instrument, profile_picture
-//         FROM users
-//         WHERE band_id = $1 AND role = 'musician'
-//       `;
-//         const membersResult = await db.query(membersQuery, [bandId]);
-
-//         const members = membersResult.rows;
-
-//         // Fetch band posts
-//         const postsQuery = `
-//         SELECT id, title, description, type, file
-//         FROM band_posts
-//         WHERE user_id = $1
-//       `;
-//         const postsResult = await db.query(postsQuery, [bandId]);
-
-//         const posts = postsResult.rows;
-
-//         // Render the EJS template
-//         res.render('band_profile', {
-//             band,
-//             members,
-//             posts,
-//         });
-//     } catch (error) {
-//         console.error('Error fetching band data:', error.message);
-//         res.status(500).send("Internal server error");
-//     }
-// });
-
-
 app.get("/search", async (req, res) => {
     const { query } = req.query;
     try {
@@ -319,12 +268,6 @@ app.get("/profile/:id", async (req, res) => {
                 "SELECT id, name, instrument, profile_picture FROM users WHERE band_id = $1 AND role = 'band_member'",
                 [user.band_id]
             );
-
-            // Fetch band posts
-            // const postsResult = await db.query(
-            //     "SELECT id, title, description, type, file FROM band_posts WHERE band_id = $1",
-            //     [user.band_id]
-            // );
 
             return res.render("profile_band", {
                 user,
@@ -550,293 +493,201 @@ app.get("/logout", (req, res) => {
     });
 });
 
-// Fetch average rating for a musician
-app.get('/ratings/:musician_id', async (req, res) => {
-    const { musician_id } = req.params;
 
-    try {
-        const result = await db.query(
-            `SELECT AVG(rating)::NUMERIC(3, 2) AS average_rating, COUNT(*) AS total_reviews 
-             FROM ratings WHERE musician_id = $1`,
-            [musician_id]
-        );
-        res.status(200).send(result.rows[0]);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send({ error: 'Internal Server Error' });
-    }
+
+// Serve frontend EJS file (assuming a views directory)
+
+app.get("/register_band", isAuthenticated, (req, res) => {
+    res.render("register_band", { user: req.user });
 });
 
-// Fetch all reviews for a musician
-app.get("/ratings/:musicianId/reviews", async (req, res) => {
-    const musicianId = req.params.musicianId;
+// Handle the form submission for new member registration
+// Handle the form submission for new member registration
+app.post('/register-member', upload.single('profile_picture'), async (req, res) => {
+    const { name, email, instrument } = req.body;
+    const profile_picture = req.file ? req.file.filename : null;
 
-    try {
-        const reviewsResult = await db.query("SELECT r.rating, r.comment, u.name AS username FROM ratings r JOIN users u ON r.user_id = u.id WHERE r.musician_id = $1", [musicianId]);
+    // Validate form data
+    if (!name || !email || !instrument || !profile_picture) {
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
 
-        if (reviewsResult.rows.length === 0) {
-            return res.json([]); // No reviews found
+    db.query(
+        "INSERT INTO band_members (name, email, instrument, profile_picture) VALUES ($1, $2, $3, $4)",
+        [name, email, instrument, profile_picture],
+        (err) => {
+            if (err) {
+                console.log(err.message);
+                return res.status(500).send("Error adding member");
+
+
+            }
+
+            // Redirect to the band profile page after successful insertion
+            res.redirect('/bandProfile');  // Make sure to redirect to the correct route
         }
+    );
+});
 
-        res.json(reviewsResult.rows);
+app.get('/bandProfile', async (req, res) => {
+    const query = 'SELECT * FROM band_members';
+    try {
+        const result = await db.query(query);
+        res.render('bandProfile', { band: result.rows }); // Render the band_profile.ejs template
     } catch (error) {
-        console.error("Error fetching reviews:", error);
-        res.status(500).send("Internal Server Error");
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 });
 
 
-    app.post('/ratings', async (req, res) => {
-        const { musicianId, user_id, rating, comment } = req.body;
+app.get('/api/band_members', async (req, res) => {
+    const query = 'SELECT * FROM band_members';
+    try {
+        const result = await db.query(query);
+        res.json(result.rows); // Send the list of band members as a JSON response
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
 
-        if (!musicianId || !user_id) {
-            return res.status(400).json({ error: 'Musician ID and User ID are required' });
-        }
+app.get('/band/:bandId', async (req, res) => {
+    const { bandId } = req.params;
 
-        try {
-            const query = `
-        INSERT INTO ratings (musician_id, user_id, rating, comment)
-        VALUES ($1, $2, $3, $4)
-      `;
-            await db.query(query, [musician_id, user_id, rating, comment]);
-            res.status(200).json({ message: 'Rating submitted successfully!' });
-        } catch (error) {
-            console.error('Error submitting rating:', error);
-            res.status(500).json({ error: 'Error submitting rating' });
-        }
-    });
-
-    app.post('/send-friend-request', async (req, res) => {
-        try {
-            const { senderId, receiverId } = req.body;
-
-            // Check for existing friendship
-            const existingFriendship = await db.query(
-                'SELECT * FROM friendships WHERE (user_id = $1 AND friend_id = $2) OR (user_id = $2 AND friend_id = $1)',
-                [senderId, receiverId]
-            );
-
-            if (existingFriendship.rows.length > 0) {
-                return res.status(400).json({ error: 'Friendship already exists' });
-            }
-
-            await db.query(
-                'INSERT INTO friendships (user_id, friend_id) VALUES ($1, $2)',
-                [senderId, receiverId]
-            );
-
-            res.status(201).json({ message: 'Friend request sent' });
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to send friend request' });
-        }
-    });
-    // Receive friend requests
-    app.get('/friend-requests', async (req, res) => {
-        try {
-            const { userId } = req.query;
-
-            const result = await db.query(
-                'SELECT u.username, u.id FROM friendships f JOIN users u ON f.friend_id = u.id WHERE f.user_id = $1 AND f.status = $2',
-                [userId, 'pending']
-            );
-
-            res.json(result.rows);
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to fetch friend requests' });
-        }
-    });
-
-    // Respond to friend request (accept/reject)
-    app.put('/respond-to-request', async (req, res) => {
-        try {
-            const { requestId, status } = req.body;
-
-            await db.query(
-                'UPDATE friendships SET status = $1 WHERE id = $2',
-                [status, requestId]
-            );
-
-            res.status(200).json({ message: `Friend request ${status}` });
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to respond to request' });
-        }
-    });
-
-    // Get total number of friends
-    app.get('/total-friends', async (req, res) => {
-        try {
-            const { userId } = req.query;
-
-            const result = await db.query(
-                `
-          SELECT COUNT(*) FROM friendships 
-          WHERE (user_id = $1 AND status = 'accepted') 
-          OR (friend_id = $1 AND status = 'accepted')
-        `,
-                [userId]
-            );
-
-            res.json({ totalFriends: result.rows[0].count });
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to get total friends' });
-        }
-    });
-
-    app.get("/register_band", isAuthenticated, (req, res) => {
-        res.render("register_band", { user: req.user });
-    });
-
-    // Serve frontend EJS file (assuming a views directory)
-    app.get('/send-friend-request', (req, res) => {
-        res.render('connections.ejs'); // Replace with your actual EJS file name
-    });
-
-    app.get("/register_band", isAuthenticated, (req, res) => {
-        res.render("register_band", { user: req.user });
-    });
-
-    // Handle the form submission for new member registration
-    // Handle the form submission for new member registration
-    app.post('/register-member', upload.single('profile_picture'), async (req, res) => {
-        const { name, email, instrument } = req.body;
-        const profile_picture = req.file ? req.file.filename : null;
-
-        // Validate form data
-        if (!name || !email || !instrument || !profile_picture) {
-            return res.status(400).json({ message: 'All fields are required.' });
-        }
-
-        db.query(
-            "INSERT INTO band_members (name, email, instrument, profile_picture) VALUES ($1, $2, $3, $4)",
-            [name, email, instrument, profile_picture],
-            (err) => {
-                if (err) {
-                    console.log(err.message);
-                    return res.status(500).send("Error adding member");
-
-
-                }
-
-                // Redirect to the band profile page after successful insertion
-                res.redirect('/bandProfile');  // Make sure to redirect to the correct route
-            }
-        );
-    });
-
-    app.get('/bandProfile', async (req, res) => {
-        const query = 'SELECT * FROM band_members';
-        try {
-            const result = await db.query(query);
-            res.render('bandProfile', { band: result.rows }); // Render the band_profile.ejs template
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error' });
-        }
-    });
-
-
-    app.get('/api/band_members', async (req, res) => {
-        const query = 'SELECT * FROM band_members';
-        try {
-            const result = await db.query(query);
-            res.json(result.rows); // Send the list of band members as a JSON response
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ message: 'Internal Server Error' });
-        }
-    });
-
-    app.get('/band/:bandId', async (req, res) => {
-        const { bandId } = req.params;
-
-        try {
-            // Fetch band details
-            const bandQuery = `
+    try {
+        // Fetch band details
+        const bandQuery = `
             SELECT id, name, description, genre
             FROM users
             WHERE id = $1
         `;
-            const bandResult = await db.query(bandQuery, [bandId]);
+        const bandResult = await db.query(bandQuery, [bandId]);
 
-            if (bandResult.rowCount === 0) {
-                return res.status(404).send("Band not found");
-            }
+        if (bandResult.rowCount === 0) {
+            return res.status(404).send("Band not found");
+        }
 
-            const band = bandResult.rows[0];
+        const band = bandResult.rows[0];
 
-            // Fetch band members
-            const membersQuery = `
+        // Fetch band members
+        const membersQuery = `
         SELECT id, name, instrument, profile_picture
         FROM users
         WHERE band_id = $1 AND role = 'musician'
       `;
-            const membersResult = await db.query(membersQuery, [bandId]);
+        const membersResult = await db.query(membersQuery, [bandId]);
 
-            console.log(membersResult.rows)
+        console.log(membersResult.rows)
 
-            // Render the EJS template
-            res.render('band_profile', { band, members: membersResult.rows });
-        } catch (error) {
-            console.error('Error fetching band data:', error.message);
-            res.status(500).send("Internal server error");
-        }
+        // Render the EJS template
+        res.render('band_profile', { band, members: membersResult.rows });
+    } catch (error) {
+        console.error('Error fetching band data:', error.message);
+        res.status(500).send("Internal server error");
+    }
+});
+
+app.get("/bands", (req, res) => {
+    db.query("SELECT * FROM bands", (err, result) => {
+        if (err) return res.status(500).send("Error fetching bands");
+        res.render("bands", { bands: result.rows });
     });
+});
 
-    app.get("/bands", (req, res) => {
-        db.query("SELECT * FROM bands", (err, result) => {
-            if (err) return res.status(500).send("Error fetching bands");
-            res.render("bands", { bands: result.rows });
-        });
-    });
+app.post("/add-post", upload.single("video"), async (req, res) => {
+    const { title, description } = req.body;
+    const video = req.file ? req.file.filename : null;
 
-    app.post("/add-post", upload.single("video"), async (req, res) => {
-        const { title, description } = req.body;
-        const video = req.file ? req.file.filename : null;
-      
-        if (!title || !description || !video) {
-          return res.status(400).send("All fields are required.");
-        }
-      
-        try {
-          await db.query(
+    if (!title || !description || !video) {
+        return res.status(400).send("All fields are required.");
+    }
+
+    try {
+        await db.query(
             "INSERT INTO posts (title, description, video) VALUES ($1, $2, $3)",
             [title, description, video]
-          );
-      
-          // Redirect to posts page or success page
-          res.redirect("/profile/:id"); // Make sure /posts is a valid route
-        } catch (error) {
-          console.error("Error saving post:", error);
-          res.status(500).send("Internal Server Error");
-        }
-      });
-      
-      // Route to fetch and render posts
-      app.get('/profile', async (req, res) => {
-        try {
-          const userId = req.user.id; // Assuming user is authenticated and `req.user` contains user info
-          const query = `
+        );
+
+        // Redirect to posts page or success page
+        res.redirect("/profile/:id"); // Make sure /posts is a valid route
+    } catch (error) {
+        console.error("Error saving post:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+// Route to fetch and render posts
+app.get('/profile', async (req, res) => {
+    try {
+        const userId = req.user.id; // Assuming user is authenticated and `req.user` contains user info
+        const query = `
             SELECT video, title, description 
             FROM posts
             WHERE user_id = $1
           `;
-          const result = await db.query(query, [userId]);
-      
-          res.render('profile', { user: req.user, posts: result.rows }); // Render posts on profile page
-        } catch (error) {
-          console.error('Error fetching posts:', error.message);
-          res.status(500).json({ message: 'Internal Server Error' });
-        }
-      });
+        const result = await db.query(query, [userId]);
 
-      app.get("/add-post-form", (req, res) => {
-        res.render("add_post_form"); // Make sure "add_post_form.ejs" is created in the views folder
-      });
-      
+        res.render('profile', { user: req.user, posts: result.rows }); // Render posts on profile page
+    } catch (error) {
+        console.error('Error fetching posts:', error.message);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
 
-    // Start the Server
-    app.listen(port, () => console.log(`Server running at http://localhost:${port}`));
+app.get("/add-post-form", (req, res) => {
+    res.render("add_post_form"); // Make sure "add_post_form.ejs" is created in the views folder
+});
+
+app.post('/submitReview', async (req, res) => {
+    const { musicianId, userId, rating, comment } = req.body;
+
+    try {
+        const query = `
+            INSERT INTO reviews (musician_id, user_id, rating, comment)
+            VALUES ($1, $2, $3, $4)
+            RETURNING *;
+          `;
+        const values = [musicianId, userId, rating, comment];
+
+        const result = await db.query(query, values);
+
+        res.status(201).json({
+            success: true,
+            message: 'Review submitted successfully',
+            review: result.rows[0],
+        });
+    } catch (err) {
+        console.error('Error submitting review:', err.message);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+// Route to fetch reviews for a musician
+app.get('/reviews/:musicianId', async (req, res) => {
+    const { musicianId } = req.params;
+
+    try {
+        const query = `
+            SELECT r.*, u.name AS user_name
+            FROM reviews r
+            JOIN users u ON r.user_id = u.id
+            WHERE r.musician_id = $1
+            ORDER BY r.created_at DESC;
+          `;
+        const result = await db.query(query, [musicianId]);
+
+        res.status(200).json({
+            success: true,
+            reviews: result.rows,
+        });
+    } catch (err) {
+        console.error('Error fetching reviews:', err.message);
+        res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+
+
+// Start the Server
+app.listen(port, () => console.log(`Server running at http://localhost:${port}`));
