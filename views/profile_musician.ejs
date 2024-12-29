@@ -12,6 +12,30 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
   <style>
+
+.stars-container {
+  display: flex;
+  gap: 4px;
+}
+
+.star {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(to right, #ccc 100%, #ccc 0%);
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+}
+
     .average-rating-card {
   padding: 1em;
   border: 1px solid #ccc;
@@ -570,23 +594,29 @@
 
 // Function to render stars for ratings
 function generateStars(rating) {
-  const fullStar = '★'; // Full star
-  const halfStar = '⯪'; // Half star (or choose an appropriate symbol)
-  const emptyStar = '☆'; // Empty star
-  let stars = '';
+  const starsContainer = document.createElement('div');
+  starsContainer.className = 'stars-container';
 
   for (let i = 1; i <= 5; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+
     if (i <= Math.floor(rating)) {
-      stars += fullStar; // Full stars
+      star.style.background = 'linear-gradient(to right, gold 100%, #ccc 0%)'; // Full star
     } else if (i - rating <= 0.5) {
-      stars += halfStar; // Half star
+      const percentage = Math.round((rating % 1) * 100); // Calculate fractional fill
+      star.style.background = `linear-gradient(to right, gold ${percentage}%, #ccc ${percentage}%)`; // Partial star
     } else {
-      stars += emptyStar; // Empty stars
+      star.style.background = 'linear-gradient(to right, #ccc 100%, #ccc 0%)'; // Empty star
     }
+
+    starsContainer.appendChild(star);
   }
 
-  return stars;
+  return starsContainer.outerHTML; // Return HTML as a string
 }
+
+
 
 async function fetchReviews(musicianId) {
   try {
@@ -604,7 +634,6 @@ async function fetchReviews(musicianId) {
       const averageRatingElement = document.createElement('div');
       averageRatingElement.className = 'average-rating-card';
       averageRatingElement.innerHTML = `
-        <h3>Average Rating</h3>
         <p>Rating: <span class="stars">${generateStars(data.averageRating)}</span> (${data.averageRating} / 5)</p>
         <p>Total Reviews: ${data.reviewCount}</p>
       `;
