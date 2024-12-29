@@ -12,6 +12,51 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
   <style>
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Space between stars */
+}
+
+.rating-stars input {
+  display: none; /* Hide radio buttons */
+}
+
+.rating-stars label {
+  width: 40px; /* Size of each star */
+  height: 40px;
+  font-size: 30px; /* Size of the stars */
+  color: #ccc; /* Default color for unselected stars */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.rating-stars label:before {
+  content: '★'; /* Use star symbol */
+}
+
+/* When a radio button is checked, change the color of the corresponding star */
+.rating-stars input:checked + label {
+  color: gold; /* Selected star color */
+}
+
+/* Hover effect to show preview of rating */
+.rating-stars label:hover,
+.rating-stars label:hover ~ label {
+  color: #ffffff; /* Hover effect (gold) */
+}
+
+/* Apply hover color up to the current hovered star */
+.rating-stars label:hover {
+  color: #ffd700;
+}
+
+.rating-stars input:checked ~ label {
+  color: gold; /* Color of stars when selected */
+}
 
 .stars-container {
   display: flex;
@@ -544,15 +589,25 @@
 
                 <div class="mb-3">
                   <label for="rating">Rating:</label>
-                  <select id="rating" name="rating" required>
-                    <option value="">Select a rating</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
+                  <div class="rating-stars">
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1" class="star" title="1 star"></label>
+                
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2" class="star" title="2 stars"></label>
+                
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3" class="star" title="3 stars"></label>
+                
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4" class="star" title="4 stars"></label>
+                
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5" class="star" title="5 stars"></label>
+                  </div>
                 </div>
+                
+                
 
                 <div class="mb-3">
                   <label for="comment" class="form-label">Your Review</label>
