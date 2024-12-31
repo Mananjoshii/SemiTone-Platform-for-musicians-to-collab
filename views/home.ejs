@@ -13,8 +13,8 @@
           <!-- Navigation Links -->
           <ul class="nav me-auto mb-2 justify-content-start">
             <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">Discover</a></li>
+            <!-- <li><a href="#" class="nav-link px-2 text-white">Features</a></li> -->
+            <!-- <li><a href="#" class="nav-link px-2 text-white">Discover</a></li> -->
             <li><a href="/about" class="nav-link px-2 text-white">About</a></li>
           </ul>
 
@@ -36,9 +36,9 @@
             <td> jbe</td>
           </div>
           
-          <div class="dropdown text-end">
-            <a href="/profile" class="d-block text-white text-decoration-none dropdown-toggle"  aria-expanded="false">
-              <img src="/uploads/images/<%= user.profile_picture %>" alt="mdo" width="32" height="32" class="rounded-circle" >
+          <div class="dropdown text-end" style="height: 35px; width: 35px;">
+            <a href="/profile" class="d-block text-white text-decoration-none "  aria-expanded="false">
+              <img src="/uploads/images/<%= user.profile_picture %>" alt="mdo" width="45" height="45" class="rounded-circle" >
             </div>
             </a>
             
@@ -95,7 +95,7 @@
               <div class="card-body">
                 <h5 class="card-title">Join Bands</h5>
                 <p class="card-text">Find the perfect bandmates and take your musical journey to the next level.</p>
-                <a href="/bands" id="fetchBands" class="btn btn-primary">Start Now</a>
+                <a href="/bands" id="fetchBands" class="btn btn-primary">Search</a>
               </div>
             </div>
           </div>
@@ -133,6 +133,7 @@
         </div>
         <div class="text-center mt-4">
           <p>© 2024 SEMITONE, Inc. All rights reserved.</p>
+          
         </div>
       </div>
     </footer>

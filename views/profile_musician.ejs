@@ -66,6 +66,9 @@
       /* Use star symbol */
     }
 
+
+
+
     /* When a radio button is checked, change the color of the corresponding star */
     .rating-stars input:checked+label {
       color: gold;
@@ -127,6 +130,11 @@
       margin: 1em 0;
       text-align: center;
       background-color: #f9f9f9;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      transition: box-shadow 0.3s ease;
+      height: 500px;
+      width: 300px;
     }
 
     .stars {
@@ -141,6 +149,9 @@
 
     .reviews {
       margin-top: 40px;
+      position: absolute;
+      right: 35px;
+      top: 64px;
     }
 
     .reviews h2 {
@@ -258,6 +269,7 @@
       cursor: pointer;
     }
 
+
     footer {
       background-color: black;
       color: white;
@@ -308,6 +320,52 @@
       text-decoration: none;
       outline: none;
     }
+
+    .reviews-column {
+      display: block;
+      /* Default display mode for column layout */
+      max-height: 600px;
+      /* Limit the height of the reviews container */
+      overflow-y: auto;
+      /* Enable vertical scrolling if content exceeds height */
+      padding: 10px;
+      /* Add padding inside the container */
+      background-color: #f9f9f9;
+      /* Optional: Background color */
+      border-radius: 5px;
+      /* Optional: Rounded corners */
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: box-shadow 0.3s ease;
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+
+    }
+
+    .review {
+      margin-bottom: 10px;
+      /* Add spacing between reviews */
+      padding: 10px;
+      /* Add padding inside each review */
+      background-color: #ffffff;
+      /* Optional: Background for each review */
+      border-radius: 5px;
+      /* Optional: Rounded corners */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      /* Optional: Subtle shadow for aesthetics */
+    }
+
+    .review:last-child {
+      margin-bottom: 0;
+      /* Remove margin for the last review */
+    }
+
+    .review:hover {
+      background-color: #f0f0f0;
+      /* Optional: Highlight on hover */
+    }
+
+
 
     header {
       background-color: #110d0a;
@@ -535,47 +593,45 @@
     <div class="row">
       <!-- Profile Section -->
       <div class="col-lg-3 col-md-4 mb-4">
-        <div class="card text-center">
-          <div class="card-body">
+        <div class="card text-center ">
+          <div class="card-body ">
             <img src="/uploads/images/<%= user.profile_picture %>" alt="Profile Picture" class="img-thumbnail mb-3">
             <h5 class="card-title">
               <%= user.name %>
             </h5>
             <p class="text-muted mb-3">Musician | <%= user.instrument %>
-                <div class="reviews">
-                  <h2>Reviews</h2>
-                  <div id="reviewsContainer">
-                    <!-- Reviews will be displayed here -->
-                  </div>
-                </div>
+
             </p>
             <div class="followers">
               <div class="card">
-                <h5 class="card-title"></h5>
-                <p id="followersCount" class="h4"></p>
+                <h5 class="card-title">Followers</h5>
+                <p id="followersCount" class="h4">5</p>
                 <button id="followButton" class="btn btn-primary">Follow</button>
               </div>
             </div>
-          </div>
+
           </div>
         </div>
-        
+      </div>
+
 
       <!-- Main Content Section -->
       <div class="col-lg-6 col-md-8">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">User Information:</h5>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item"><strong>Email:</strong>
+            <ul class="list-group list-group-flush" style="padding: 10px;">
+              <li class=""><strong>Email:</strong>
                 <%= user.email %>
-              <li class="list-group-item"><strong>Social Media Links:</strong>
+                  </br>
+              <li class="user" style="height: 35px;"><strong>Social Media Links:</strong>
                 <a href="https://www.instagram.com"><img
                     src="/png-transparent-logo-icon-instagram-logo-instagram-logo-purple-violet-text-thumbnail.png"
-                    style="height: 20px;"></a>
+                    style="height: 20px; "></a>
+
                 <a href="https://www.facebook.com"><img
                     src="/png-clipart-facebook-logo-computer-icons-facebook-logo-facebook-thumbnail.png"
-                    style="height: 20px;"></a>
+                    style="height: 22px; padding-left: 5px;"></a>
               </li>
             </ul>
           </div>
@@ -595,14 +651,14 @@
         </div>
         <section class="container my-5">
 
-          <div class="card">
-            <div class="card-body">
-              <h2 class="mb-4">Leave a review</h2>
+          <div class="card " style="width: 650px; height: 280px; top: 1px;">
+            <div class="card-body" style="height: auto;">
+              <h2 class="mb-4">Leave a review:</h2>
               <form id="ratingForm" action="/submitReview" method="post">
                 <input type="hidden" id="musicianId" name="musicianId" value="<%= user.id %>">
                 <input type="hidden" id="userId" name="userId" value="<%= user.id %>">
 
-                <div class="mb-3">
+                <div class="mb-3" style="height: 30px;">
                   <label for="rating">Rating:</label>
                   <div class="rating-stars">
                     <input type="radio" id="star1" name="rating" value="1">
@@ -626,19 +682,54 @@
 
                 <div class="mb-3">
                   <label for="comment" class="form-label"></label>
-                  <textarea class="form-control" id="comment" name="comment" rows="4" placeholder=""></textarea>
+                  <textarea class="form-control" id="comment" name="comment" rows="4" placeholder=""
+                    style="height: 0px;"></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit Review</button>
+                <button type="submit" class="btn btn-primary" style="position: absolute; right: 45%;">Submit
+                  Review</button>
               </form>
             </div>
           </div>
-          
+
+          <div class="reviews">
+
+            <h2>Recent Reviews</h2>
+            <div id="reviewsContainer" class="reviews-column">
+              <div id="reviewsContainer">
+                <!-- Reviews will be displayed here -->
+              </div>
+            </div>
+          </div>
       </div>
 
       </section>
 
     </div>
+    <div class="user_post" style="margin-right: 500px;">
+      <section class="container my-4" >
+        <h2 class="mb-4">User Posts</h2>
+        <div class="row g-3">
+          <!-- Post 1 -->
+          <div class="col-md-4">
+            <div class="card">
+              <video src="/uploads/videos/<%= user.video %>" controls></video>
+              <div class="card-body">
+                <h5 class="card-title">Acoustic Vibes</h5>
+                <p class="card-text">A soothing new track with a mix of relaxing melodies and acoustic guitar.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 text-center mt-4">
+            <a href="/add-post-form" class="btn btn-primary btn-lg" id="addPostButton">
+              <i class="fas fa-plus"></i> Add New Post
+            </a>
+          </div>
+          </form>
+      </section>
+    </div>
+    
+  
 
   </div>
 
@@ -650,42 +741,7 @@
 
 
 
-  <section class="container my-4">
-    <h2 class="mb-4">User Posts</h2>
-    <div class="row g-3">
-      <!-- Post 1 -->
-      <div class="col-md-4">
-        <div class="card">
-          <video src="/uploads/videos/<%= user.video %>" controls></video>
-          <div class="card-body">
-            <h5 class="card-title">Acoustic Vibes</h5>
-            <p class="card-text">A soothing new track with a mix of relaxing melodies and acoustic guitar.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-12 text-center mt-4">
-        <a href="/add-post-form" class="btn btn-primary btn-lg" id="addPostButton">
-          <i class="fas fa-plus"></i> Add New Post
-        </a>
-      </div>
-
-
-
-
-
-      </form>
-
-  </section>
-
-
-  <!-- <div class="reviews">
-      <h2>Reviews</h2>
-      <div id="reviewsContainer"> 
-         Reviews will be displayed here -->
-  <!-- </div>
-    </div>  -->
-
-
+  
   <!-- Footer Section -->
 
 
@@ -751,7 +807,7 @@
           averageRatingElement.innerHTML = `
         <p>Rating: <span class="stars">${generateStars(data.averageRating)}</span> (${data.averageRating} / 5)</p>
         <p>Total Reviews: ${data.reviewCount}</p>
-        
+        <p>Reviews: ${data.comments}</p>
       `;
           reviewsContainer.appendChild(averageRatingElement);
 
@@ -761,6 +817,22 @@
         console.error('Error fetching reviews:', err.message);
       }
     }
+
+    const followersCountElement = document.getElementById('followersCount');
+    const followButton = document.getElementById('followButton');
+
+    // Add click event listener to the follow button
+    followButton.addEventListener('click', () => {
+      // Update the followers count
+      let followersCount = parseInt(followersCountElement.textContent);
+      followersCountElement.textContent = followersCount + 1;
+
+      // Change button text and disable it
+      followButton.textContent = 'Followed';
+      followButton.classList.remove('btn-primary');
+      followButton.classList.add('btn-secondary');
+      followButton.disabled = true;
+    });
 
     // Fetch reviews and average rating on page load
     document.addEventListener('DOMContentLoaded', () => {

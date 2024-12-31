@@ -1,41 +1,64 @@
+// Assuming all routers are in separate files
+
+// artistsRouter.js
 import express from "express";
-const router = express.Router();
+const artistsRouter = express.Router();
 import db from './db.js'; // Import the database configuration
 
-// Fetch Artists
-router.get('/artists', async (req, res) => {
+artistsRouter.get('/artists', async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM artists');
-    // res.json(result.rows); // Send data as JSON for client-side rendering
-    res.render('artists', { title: 'Find Artists', artists: result.rows });
+    const artists = await db.query('SELECT * FROM artists');
+    res.render('artists', { title: 'Find Artists', artists: artists.rows });
   } catch (err) {
     console.error('Error fetching artists:', err);
     res.status(500).send('Error fetching artists');
   }
 });
 
-// Fetch Events
-router.get('/events', async (req, res) => {
+export { artistsRouter };
+
+// eventsRouter.js
+import express from "express";
+const eventsRouter = express.Router();
+import db from './db.js'; // Import the database configuration
+
+eventsRouter.get('/events', async (req, res) => {
   try {
-    const result = await db.query('SELECT * FROM events');
-    res.render('events');
+    const events = await db.query('SELECT * FROM events');
+    // Assuming you want to display all events data:
+    res.render('events', { title: 'Upcoming Events', events: events.rows });
   } catch (err) {
     console.error('Error fetching events:', err);
     res.status(500).send('Error fetching events');
   }
 });
 
-// Fetch Bands
-router.get('/bands', async (req, res) => {
-  try {
-    const result = await db.query('SELECT * FROM bands');
-    res.render('bands', { title: 'Join Bands', bands: result.rows });
-  } catch (err) {
-    console.error('Error fetching bands:', err);
-    res.status(500).send('Error fetching bands');
-  }
-});
+export { eventsRouter };
 
+// bandsRouter.js (similar to artistsRouter.js)
+import express from "express";
+const bandsRouter = express.Router();
+import db from './db.js'; // Import the database configuration
 
+// ... (Rest of the bandsRouter code)
 
-export default router;
+export default bandsRouter;
+
+// connectionsRouter.js (Assuming it's in a separate file)
+const express = require('express');
+const connectionsRouter = express.Router();
+const connectionsController = require('../controllers/connectionsController');
+
+// Fetch all connections
+connectionsRouter.get('/', connectionsController.getConnections);
+
+// Search users by name
+connectionsRouter.get('/search', connectionsController.searchUsersByName);
+
+// Send a connection request
+connectionsRouter.post('/send', connectionsController.sendConnectionRequest);
+
+// Update connection status
+connectionsRouter.post('/update', connectionsController.updateConnectionStatus);
+
+module.exports = connectionsRouter;

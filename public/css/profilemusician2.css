@@ -1,0 +1,445 @@
+
+    .my-5 {
+      margin-top: 0px;
+      margin-bottom: 2rem !important;
+      width: 315px;
+      margin-left: 5px;
+      padding-top: 0px;
+      height: 30px;
+
+
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        margin-bottom: 15px;
+      }
+
+      .followers-section {
+        flex-direction: column;
+        padding: 15px;
+      }
+    }
+
+    .rating-stars {
+        display: flex;
+        justify-content: center;
+        gap: 10px; /* Space between stars */
+      }
+      
+      .rating-stars input {
+        display: none; /* Hide radio buttons */
+      }
+      
+      .rating-stars label {
+        font-size: 30px; /* Size of the stars */
+        color: #ccc; /* Default color for unselected stars */
+        cursor: pointer;
+        transition: color 0.2s ease-in-out;
+      }
+      
+      .rating-stars label:before {
+        content: '★'; /* Use star symbol */
+      }
+      
+      .rating-stars input:checked ~ label {
+        color: gold; /* Selected star color */
+      }
+      
+      /* Hover effect to show a preview of the rating */
+      .rating-stars label:hover,
+      .rating-stars label:hover ~ label {
+        color: gold; /* Color when hovering */
+      }
+      
+      /* Apply hover color only to the stars up to the hovered star */
+      .rating-stars label:hover ~ label {
+        color: #ccc; /* Reset color for stars after the hovered star */
+      }
+      
+
+
+    .reviews {
+      margin-top: 40px;
+    }
+
+    .reviews h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .review {
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+      margin-bottom: 25px;
+      padding: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .review:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .review-header h5 {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .review-header .rating {
+      display: flex;
+      align-items: center;
+    }
+
+    .review-header .rating span {
+      color: #FFD700;
+      font-size: 20px;
+      margin-left: 5px;
+    }
+
+    .review-body p {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .review-body p strong {
+      color: #222;
+    }
+
+    /* Responsive Design for Review Cards */
+    @media (max-width: 768px) {
+      .review {
+        padding: 15px;
+      }
+
+      .review-header h5 {
+        font-size: 16px;
+      }
+
+      .review-body p {
+        font-size: 14px;
+      }
+    }
+
+    .img-thumbnail {
+      border-radius: 50px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .dashboard-container {
+      padding: 20px;
+    }
+
+    .profile-section img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .card {
+      margin-bottom: 20px;
+      border-radius: 15px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .list-group-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #f8f9fa;
+      border: none;
+      padding: 15px;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    .list-group-item:hover {
+      background-color: #e8f4ff;
+      cursor: pointer;
+    }
+
+    footer {
+      background-color: black;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .professional.details,
+    .list-group {
+      list-style-type: none;
+      padding: 0;
+      margin: 20px 0;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+    }
+
+    .professional.details li,
+    .list-group-item {
+      padding: 15px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .professional.details li:last-child,
+    .list-group-item:last-child {
+      border-bottom: none;
+    }
+
+    .professional.details li:hover,
+    .list-group-item:hover {
+      background-color: #eef6ff;
+    }
+
+    .band-members img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    a,
+    .focused-element {
+      text-decoration: none;
+      outline: none;
+    }
+
+    header {
+      background-color: #110d0a;
+      /* Dark background for contrast */
+      color: #f9c846;
+      /* Light text color */
+      padding: 10px 20px;
+      /* Minimal padding to reduce height */
+      display: flex;
+      /* Flexbox for alignment */
+      justify-content: space-between;
+      /* Space between elements */
+      align-items: center;
+      /* Center vertically */
+      border-bottom: 2px solid #f9c846;
+      /* Add a bottom border for separation */
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      /* Adjust font size */
+      margin: 0;
+      /* Remove extra margin */
+      line-height: 1.2;
+      /* Reduce spacing between lines */
+    }
+
+    header nav a {
+      margin: 0 10px;
+      color: #f9c846;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+
+    header nav a:hover {
+      color: #ffd369;
+    }
+
+    html,
+    body {
+      height: 100%;
+      /* Ensures full height for the page */
+      margin: 0;
+      /* Removes any default margins */
+    }
+
+    .container {
+      padding: 0;
+      /* Ensure the container uses full width */
+    }
+
+    html,
+    body {
+      height: 100%;
+      /* Ensures full height for the page */
+      margin: 0;
+      /* Removes any default margins */
+    }
+
+    footer {
+      background-color: #110d0a;
+      /* Dark background for the footer */
+      color: #f9f9f9;
+      /* Light text color */
+      text-align: center;
+      /* Center-align text */
+      padding: 20px 0;
+      /* Adjust padding */
+      border-top: 2px solid #f9c846;
+      /* Add a top border for distinction */
+      width: 100%;
+      /* Ensures full width */
+      position: relative;
+      bottom: 0;
+      /* Ensures footer stays at the bottom */
+      left: 0;
+      /* Makes sure it starts at the left edge of the screen */
+    }
+
+    footer .footer-content {
+      width: 100%;
+      /* Ensure content takes full width */
+      max-width: 1200px;
+      /* Optional: limit the content width to prevent it from being too stretched */
+      margin: 0 auto;
+      /* Centers the content horizontally */
+    }
+
+    footer p {
+      margin: 0;
+      /* Removes default margin */
+    }
+
+    footer a {
+      color: #f2f0ea;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #e5e3de;
+      /* Change color on hover */
+    }
+
+    footer .nav {
+      list-style: none;
+      /* Removes default list style */
+      padding: 0;
+      margin: 10px 0 0;
+    }
+
+    footer .nav-item {
+      display: inline-block;
+      margin: 0;
+    }
+
+    footer .nav-link {
+      color: #f9f9f9;
+      /* Light color for the social media links */
+      font-size: 20px;
+      /* Adjust font size for icons */
+    }
+
+    footer .nav-link:hover {
+      color: #ffd369;
+      /* Change color when hovered */
+    }
+
+
+
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      /* Adjust based on layout needs */
+      width: 100%;
+    }
+
+    .semitone-gif {
+      max-height: 50px;
+      /* Adjust according to your design */
+      margin-right: 15px;
+      /* Space between gif and button */
+    }
+
+    .logout-btn {
+      margin-left: auto;
+      /* This will push the button to the right */
+    }
+
+    .followers-section {
+
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background-color: #f8f9fa;
+      /* Light gray background for contrast */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      /* Subtle shadow for depth */
+      border-radius: 10px;
+      /* Rounded corners */
+      padding: 20px;
+      /* Spacing inside the card */
+      /* Full width in flex container */
+      /* Restrict maximum width */
+      width: 23px;
+      /* Automatic height based on content */
+      margin: 0 auto;
+      /* Center alignment */
+    }
+
+    .followers-section h5 {
+      font-size: 1.5rem;
+      /* Larger title font size */
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .followers-section p {
+      font-size: 1.25rem;
+      /* Slightly larger font for followers count */
+      margin: 10px 0;
+    }
+
+    .followers-section button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      /* Bootstrap primary blue */
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .followers-section button:hover {
+      background-color: #0056b3;
+      /* Darker blue on hover */
+      transition: background-color 0.3s ease;
+    }
+   
+    form {
+      position: absolute; 
+      margin-left: auto;
+      margin-right: 0;
+      width: 300px; 
+      right: 23px;
+      top: 86px;
+      
+
+    }
+ 
+  

@@ -283,8 +283,6 @@ app.get("/profile/:id", async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-
-
 app.get("/api/artist/:id", (req, res) => {
     const userId = req.params.id;
 
@@ -666,35 +664,85 @@ app.post('/submitReview', async (req, res) => {
 // Route to fetch reviews for a musician
 app.get('/reviews/:musicianId', async (req, res) => {
     const { musicianId } = req.params;
-  
+
     try {
-      // Calculate the average rating
-      const averageQuery = `
-        SELECT COALESCE(AVG(rating), 0) AS average_rating
-        FROM reviews
-        WHERE musician_id = $1;
-      `;
-      const averageResult = await db.query(averageQuery, [musicianId]);
-  
-      // Get total number of reviews
-      const countQuery = `
-        SELECT COUNT(*) AS review_count
-        FROM reviews
-        WHERE musician_id = $1;
-      `;
-      const countResult = await db.query(countQuery, [musicianId]);
-  
-      res.status(200).json({
-        success: true,
-        averageRating: parseFloat(averageResult.rows[0].average_rating).toFixed(2),
-        reviewCount: countResult.rows[0].review_count,
-      });
+        // Calculate the average rating
+        const averageQuery = `
+            SELECT COALESCE(AVG(rating), 0) AS average_rating
+            FROM reviews
+            WHERE musician_id = $1;
+        `;
+        const averageResult = await db.query(averageQuery, [musicianId]);
+
+        // Get total number of reviews
+        const countQuery = `
+            SELECT COUNT(*) AS review_count
+            FROM reviews
+            WHERE musician_id = $1;
+        `;
+        const countResult = await db.query(countQuery, [musicianId]);
+
+        // Get all comments for the musician
+        const commentsQuery = `
+            SELECT comment
+            FROM reviews
+            WHERE musician_id = $1;
+        `;
+        const commentsResult = await db.query(commentsQuery, [musicianId]);
+
+        // Format the comments as an array of strings
+        const comments = commentsResult.rows.map(row => row.comment);
+
+        res.status(200).json({
+            success: true,
+            averageRating: parseFloat(averageResult.rows[0].average_rating).toFixed(2),
+            reviewCount: countResult.rows[0].review_count,
+            comments: comments,  // Add the comments to the response
+        });
     } catch (err) {
-      console.error('Error fetching reviews:', err.message);
-      res.status(500).json({ success: false, message: 'Internal server error' });
+        console.error('Error fetching reviews:', err.message);
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
-  });
-  
+});
+
+  app.post('/follow', async (req, res) => {
+    const { follower_id, followed_id } = req.body;
+
+    try {
+        // Check if the user is already following
+        const existingFollow = await db.query(
+            'SELECT 1 FROM user_followers WHERE follower_id = $1 AND followed_id = $2',
+            [follower_id, followed_id]
+        );
+
+        if (existingFollow.rowCount > 0) {
+            return res.status(400).json({ message: "You are already following this user." });
+        }
+
+        // Add the follow record
+        await db.query(
+            'INSERT INTO user_followers (follower_id, followed_id) VALUES ($1, $2)',
+            [follower_id, followed_id]
+        );
+
+        // Increment the followers count
+        const updateResult = await db.query(
+            'UPDATE users SET followers = followers + 1 WHERE id = $1 RETURNING followers',
+            [followed_id]
+        );
+
+        const updatedFollowersCount = updateResult.rows[0].followers;
+
+        res.status(200).json({ 
+            message: "Followed successfully!", 
+            followers: updatedFollowersCount 
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ error: "Server error." });
+    }
+});
+
 
 
 
