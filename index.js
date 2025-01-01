@@ -207,11 +207,12 @@ app.get("/search", async (req, res) => {
         }
 
         const sqlQuery = `
-        SELECT id, name, profile_picture, description 
-        FROM users 
-        WHERE (role = 'musician' OR role = 'band_member') AND name ILIKE $1;
-        
-        `;
+    SELECT id, name, profile_picture, description 
+    FROM users 
+    WHERE (role = 'musician' OR role = 'band_member') 
+    AND (name ILIKE $1 OR instrument ILIKE $1);
+`;
+
 
         const result = await db.query(sqlQuery, [`%${query}%`]);
 
@@ -237,73 +238,73 @@ app.get("/artists", (req, res) => {
 });
 app.get('/profile/:id', async (req, res) => {
     const userId = req.params.id;
-  
+
     try {
-      // Fetch user data
-      const userResult = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
-  
-      if (userResult.rows.length === 0) {
-        console.error("User not found.");
-        return res.status(404).send("User not found");
-      }
-  
-      const user = userResult.rows[0];
-  
-      let videos = []; // Initialize an empty array for videos
-  
-      // Fetch videos based on user role
-      if (user.role === "musician") {
-        // Fetch videos uploaded by the musician
-        const videoResult = await db.query(
-            "SELECT * FROM videos WHERE uploaded_by = $1 ORDER BY uploaded_at DESC",
-            [userId]
-          );
-          
-        videos = videoResult.rows;
-  
-        // Render musician profile with videos
-        return res.render("profile_musician", { user, musicianId: user.id, userId, videos });
-      } else if (user.role === "band_member") {
-        // Fetch the associated band details
-        const bandResult = await db.query("SELECT * FROM bands WHERE id = $1", [user.band_id]);
-  
-        if (bandResult.rows.length === 0) {
-          console.error("Band not found.");
-          return res.status(404).send("Band not found");
+        // Fetch user data
+        const userResult = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
+
+        if (userResult.rows.length === 0) {
+            console.error("User not found.");
+            return res.status(404).send("User not found");
         }
-  
-        const band = bandResult.rows[0];
-  
-        // Fetch band members
-        const membersResult = await db.query(
-          "SELECT id, name, instrument, profile_picture FROM users WHERE band_id = $1 AND role = 'band_member'",
-          [user.band_id]
-        );
-  
-        // Fetch videos associated with the band
-        const videoResult = await db.query(
-          "SELECT * FROM videos WHERE band_id = $1 ORDER BY uploaded_at DESC",
-          [user.band_id]
-        );
-        videos = videoResult.rows;
-  
-        // Render band profile with videos and members
-        return res.render("profile_band", {
-          user,
-          band: { ...band, members: membersResult.rows, posts: videos },
-          musicianId: user.band_id, // Passing band_id as musicianId for the band member
-          userId,
-          videos,
-        });
-      } else {
-        return res.status(400).send("Invalid user role");
-      }
+
+        const user = userResult.rows[0];
+
+        let videos = []; // Initialize an empty array for videos
+
+        // Fetch videos based on user role
+        if (user.role === "musician") {
+            // Fetch videos uploaded by the musician
+            const videoResult = await db.query(
+                "SELECT * FROM videos WHERE uploaded_by = $1 ORDER BY uploaded_at DESC",
+                [userId]
+            );
+
+            videos = videoResult.rows;
+
+            // Render musician profile with videos
+            return res.render("profile_musician", { user, musicianId: user.id, userId, videos });
+        } else if (user.role === "band_member") {
+            // Fetch the associated band details
+            const bandResult = await db.query("SELECT * FROM bands WHERE id = $1", [user.band_id]);
+
+            if (bandResult.rows.length === 0) {
+                console.error("Band not found.");
+                return res.status(404).send("Band not found");
+            }
+
+            const band = bandResult.rows[0];
+
+            // Fetch band members
+            const membersResult = await db.query(
+                "SELECT id, name, instrument, profile_picture FROM users WHERE band_id = $1 AND role = 'band_member'",
+                [user.band_id]
+            );
+
+            // Fetch videos associated with the band
+            const videoResult = await db.query(
+                "SELECT * FROM videos WHERE band_id = $1 ORDER BY uploaded_at DESC",
+                [user.band_id]
+            );
+            videos = videoResult.rows;
+
+            // Render band profile with videos and members
+            return res.render("profile_band", {
+                user,
+                band: { ...band, members: membersResult.rows, posts: videos },
+                musicianId: user.band_id, // Passing band_id as musicianId for the band member
+                userId,
+                videos,
+            });
+        } else {
+            return res.status(400).send("Invalid user role");
+        }
     } catch (error) {
-      console.error("Error fetching user profile:", error);
-      res.status(500).send("Internal Server Error");
+        console.error("Error fetching user profile:", error);
+        res.status(500).send("Internal Server Error");
     }
-  });
-  
+});
+
 app.get("/api/artist/:id", (req, res) => {
     const userId = req.params.id;
 
@@ -726,7 +727,7 @@ app.get('/reviews/:musicianId', async (req, res) => {
     }
 });
 
-  app.post('/follow', async (req, res) => {
+app.post('/follow', async (req, res) => {
     const { follower_id, followed_id } = req.body;
 
     try {
@@ -754,9 +755,9 @@ app.get('/reviews/:musicianId', async (req, res) => {
 
         const updatedFollowersCount = updateResult.rows[0].followers;
 
-        res.status(200).json({ 
-            message: "Followed successfully!", 
-            followers: updatedFollowersCount 
+        res.status(200).json({
+            message: "Followed successfully!",
+            followers: updatedFollowersCount
         });
     } catch (err) {
         console.error(err.message);
@@ -767,12 +768,12 @@ app.get('/reviews/:musicianId', async (req, res) => {
 // app.post('/upload-video', upload.single('videoFile'), async (req, res) => {
 //     const videoTitle = req.body.videoTitle;
 //     const videoPath = `/uploads/videos/${req.file.filename}`;
-  
+
 //     try {
 //       // Insert video data into the database
 //       const query = 'INSERT INTO videos (title, path) VALUES ($1, $2)';
 //       await db.query(query, [videoTitle, videoPath]);
-  
+
 //       res.redirect('/videos'); // Redirect to the videos page after successful upload
 //     } catch (err) {
 //       console.error('Error saving video data:', err);
@@ -792,8 +793,8 @@ app.get('/reviews/:musicianId', async (req, res) => {
 //       res.status(500).send('An error occurred while fetching videos.');
 //     }
 //   });
-  
-  
+
+
 
 // Start the Server
 app.listen(port, () => console.log(`Server running at http://localhost:${port}`));
