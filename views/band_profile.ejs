@@ -121,6 +121,7 @@
         .card {
             margin-bottom: 20px;
             border-radius: 20px;
+            
         }
 
         .list-group-item {
@@ -202,8 +203,8 @@
                             </h1>
                             <img src="/uploads/images/<%= band.profile_picture || 'default-band.jpg' %>"
                                 alt="<%= band.name %>" class="img-thumbnail mb-3">
-                
-                            <p class="text-muted mb-3">Musician | <%= band.description || 'No description available.' %></p>
+
+
                         </div>
                     </div>
                 </div>
@@ -229,20 +230,30 @@
                                 <h5 class="card-title">Connect with Us:</h5>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><a href="https://instagram.com"
-                                            target="_blank" >Instagram</a> <img src="/instagram.jpeg" alt="" height="15px" width="15px"></li>
+                                            target="_blank">Instagram</a> <img src="/instagram.jpeg" alt=""
+                                            height="15px" width="15px"></li>
                                     <li class="list-group-item"><a href="https://facebook.com"
-                                            target="_blank">Facebook</a><img src="/facebook.jpeg" alt="" srcset="" height="15px" width="15px"></li>
+                                            target="_blank">Facebook</a><img src="/facebook.jpeg" alt="" srcset=""
+                                            height="15px" width="15px"></li>
                                     <li class="list-group-item"><a href="https://gmail.com"
-                                            target="_blank">Gmail</a><img src="/gmail.png" alt="" srcset="" height="25px" width="25px"></li>
+                                            target="_blank">Gmail</a><img src="/gmail.png" alt="" srcset=""
+                                            height="25px" width="25px"></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-
-                    
-
                     <a href="/register_band" class="btn btn-success mt-3">Add Member</a>
-                    <a href="/bandProfile" class="btn btn-success mt-3">View  Members</a>
+                    <a href="/bandProfile" class="btn btn-success mt-3">View Members</a>
+                </div>
+                <div>
+                    <div class="card connect-card" style="width: 350px; position: absolute; right: 45px; height: 450px; top: 166px;">
+                        <div class="card-body">
+                            <p class="text-muted mb-3 "  ><strong>Achivements and Descriptions:</strong>  
+                            </p>
+                            <div class="list-group-item list-group list-group-flush"><%= band.description
+                                || 'No description available.' %></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -264,15 +275,17 @@
 
         <footer class="bg-dark text-white py-4 mt-5">
             <div class="footer-content text-center">
-              <p>&copy; 2024 Semitones. All rights reserved.</p>
-              <ul class="nav justify-content-center">
-                <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-facebook"></i></a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-twitter"></i></a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-instagram"></i></a></li>
-              </ul>
+                <p>&copy; 2024 Semitones. All rights reserved.</p>
+                <ul class="nav justify-content-center">
+                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-facebook"></i></a>
+                    </li>
+                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-twitter"></i></a></li>
+                    <li class="nav-item"><a href="#" class="nav-link text-white"><i class="fab fa-instagram"></i></a>
+                    </li>
+                </ul>
             </div>
-          </footer>
-      
+        </footer>
+
     </main>
 
 

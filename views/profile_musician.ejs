@@ -146,69 +146,57 @@
       font-size: 1.5em;
     }
 
+/* Style for the reviews section */
+.reviews {
+  
+  max-width: 300px; /* Ensure the reviews section has a maximum width */
+  margin: 20px auto; /* Center the reviews section horizontally */
+  padding: 15px;
+  box-sizing: border-box;
+  background-color: #fff; /* Background color for the reviews section */
+  border: 1px solid #ccc;
+  border-radius: 8px; /* Rounded corners */
+  position: absolute;
+      right: 34px;
+      top: 80px;
+}
 
-    .reviews {
-      margin-top: 40px;
-      position: absolute;
-      right: 35px;
-      top: 64px;
-    }
+/* Container for recent reviews */
+.reviews-column {
+  max-height: 800px; /* Set a fixed height for the reviews container */
+  overflow-y: auto; /* Enable vertical scrolling if content exceeds height */
+  padding: 10px;
+  background-color: #f9f9f9; /* Light background color */
+  border-radius: 8px;
+  box-sizing: border-box; /* Ensure padding is included in the total width */
+  
+}
 
-    .reviews h2 {
-      font-size: 24px;
-      margin-bottom: 20px;
-      font-weight: bold;
-      color: #333;
-    }
+/* Individual review styling */
+.reviews-column > div {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+}
 
-    .review {
-      background-color: #ffffff;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
-      margin-bottom: 25px;
-      padding: 20px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+/* Prevent long content from overflowing */
+.reviews-column {
+  word-wrap: break-word; /* Break long words to prevent overflow */
+}
 
-    .review:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
+/* Ensure buttons or other content don't exceed container width */
+.reviews-column button,
+.reviews-column img {
+  max-width: 100%;
+}
 
-    .review-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+/* Optional: Add hover effects for individual reviews */
+.reviews-column > div:hover {
+  background-color: #f1f1f1;
+  border-color: #bbb;
+}
 
-    .review-header h5 {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .review-header .rating {
-      display: flex;
-      align-items: center;
-    }
-
-    .review-header .rating span {
-      color: #FFD700;
-      font-size: 20px;
-      margin-left: 5px;
-    }
-
-    .review-body p {
-      margin-top: 10px;
-      font-size: 16px;
-      color: #444;
-      line-height: 1.5;
-    }
-
-    .review-body p strong {
-      color: #222;
-    }
 
     /* Responsive Design for Review Cards */
     @media (max-width: 768px) {
@@ -321,28 +309,10 @@
       outline: none;
     }
 
-    .reviews-column {
-      display: block;
-      /* Default display mode for column layout */
-      max-height: 600px;
-      /* Limit the height of the reviews container */
-      overflow-y: auto;
-      /* Enable vertical scrolling if content exceeds height */
-      padding: 10px;
-      /* Add padding inside the container */
-      background-color: #f9f9f9;
-      /* Optional: Background color */
-      border-radius: 5px;
-      /* Optional: Rounded corners */
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      transition: box-shadow 0.3s ease;
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    
+    
 
-
-    }
-
-    .review {
+    .review{
       margin-bottom: 10px;
       /* Add spacing between reviews */
       padding: 10px;
@@ -353,8 +323,12 @@
       /* Optional: Rounded corners */
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       /* Optional: Subtle shadow for aesthetics */
-    }
+      
+  
+      
 
+    }
+    
     .review:last-child {
       margin-bottom: 0;
       /* Remove margin for the last review */
@@ -538,6 +512,7 @@
       margin: 0 auto;
       /* Center alignment */
     }
+    
 
     .followers-section h5 {
       font-size: 1.5rem;
@@ -695,7 +670,7 @@
           <div class="reviews">
 
             <h2>Recent Reviews</h2>
-            <div id="reviewsContainer" class="reviews-column">
+            <div id="reviewsContainer" class="reviews-column" >
               <div id="reviewsContainer">
                 <!-- Reviews will be displayed here -->
               </div>
@@ -706,7 +681,7 @@
       </section>
 
     </div>
-    <div class="user_post" style="margin-right: 500px;">
+    <div class="user_post" >
       <section class="container my-4" >
         <h2 class="mb-4">User Posts</h2>
         <div class="row g-3">
@@ -724,7 +699,7 @@
             <a href="/add-post-form" class="btn btn-primary btn-lg" id="addPostButton">
               <i class="fas fa-plus"></i> Add New Post
             </a>
-          </div>
+          </div>          
           </form>
       </section>
     </div>
