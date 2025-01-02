@@ -236,7 +236,7 @@ app.get("/artists", (req, res) => {
         res.render("artists", { artists: result.rows });
     });
 });
-app.get('/profile/:id', async (req, res) => {
+app.get("/profile/:id", async (req, res) => {
     const userId = req.params.id;
 
     try {
@@ -266,7 +266,18 @@ app.get('/profile/:id', async (req, res) => {
             return res.render("profile_musician", { user, musicianId: user.id, userId, videos });
         } else if (user.role === "band_member") {
             // Fetch the associated band details
-            const bandResult = await db.query("SELECT * FROM bands WHERE id = $1", [user.band_id]);
+
+            db.query(
+                "INSERT INTO bands (name, email, instrument, profile_picture) VALUES ($1, $2, $3, $4)",
+                [name, email, instrument, profile_picture],
+                (err) => {
+                    if (err) {
+                        console.log(err.message);
+                        return res.status(500).send("Error adding member");
+                    }
+                }
+            );
+            const bandResult = await db.query("SELECT * FROM bands WHERE band_id = $1", [user.band_id]);
 
             if (bandResult.rows.length === 0) {
                 console.error("Band not found.");
@@ -277,7 +288,7 @@ app.get('/profile/:id', async (req, res) => {
 
             // Fetch band members
             const membersResult = await db.query(
-                "SELECT id, name, instrument, profile_picture FROM users WHERE band_id = $1 AND role = 'band_member'",
+                "SELECT id, name, instrument, profile_picture FROM users WHERE id = $1 AND role = 'band_member'",
                 [user.band_id]
             );
 
@@ -289,7 +300,7 @@ app.get('/profile/:id', async (req, res) => {
             videos = videoResult.rows;
 
             // Render band profile with videos and members
-            return res.render("profile_band", {
+            return res.render("band_profile", {
                 user,
                 band: { ...band, members: membersResult.rows, posts: videos },
                 musicianId: user.band_id, // Passing band_id as musicianId for the band member
@@ -456,7 +467,7 @@ app.get('/band/:id', async (req, res) => {
 
     try {
         // Fetch band details
-        const bandQuery = `SELECT * FROM bands WHERE id = $1`;
+        const bandQuery = `SELECT * FROM users WHERE id = $1`;
         const bandResult = await db.query(bandQuery, [bandId]);
 
         if (bandResult.rows.length === 0) {
@@ -608,12 +619,12 @@ app.get('/band/:bandId', async (req, res) => {
     }
 });
 
-app.get("/bands", (req, res) => {
-    db.query("SELECT * FROM bands", (err, result) => {
-        if (err) return res.status(500).send("Error fetching bands");
-        res.render("bands", { bands: result.rows });
-    });
-});
+// app.get("/bands", (req, res) => {
+//     db.query("SELECT * FROM bands", (err, result) => {
+//         if (err) return res.status(500).send("Error fetching bands");
+//         res.render("bands", { bands: result.rows });
+//     });
+// });
 
 app.post("/add-post", upload.single("video"), async (req, res) => {
     const { title, description } = req.body;
@@ -764,37 +775,6 @@ app.post('/follow', async (req, res) => {
         res.status(500).json({ error: "Server error." });
     }
 });
-
-// app.post('/upload-video', upload.single('videoFile'), async (req, res) => {
-//     const videoTitle = req.body.videoTitle;
-//     const videoPath = `/uploads/videos/${req.file.filename}`;
-
-//     try {
-//       // Insert video data into the database
-//       const query = 'INSERT INTO videos (title, path) VALUES ($1, $2)';
-//       await db.query(query, [videoTitle, videoPath]);
-
-//       res.redirect('/videos'); // Redirect to the videos page after successful upload
-//     } catch (err) {
-//       console.error('Error saving video data:', err);
-//       res.status(500).send('An error occurred while uploading the video.');
-//     }
-//   });
-
-//   app.get('/videos', async (req, res) => {
-//     const { userId } = req.params;
-//     try {
-//       const result = await db.query('SELECT * FROM videos ORDER BY uploaded_at DESC');
-//       const videoss = result.rows[0]; // Array of video objects
-//       res.redirect(`/profile/${userId}`);
-//  // Pass videos to your template for rendering
-//     } catch (err) {
-//       console.error('Error fetching videos:', err);
-//       res.status(500).send('An error occurred while fetching videos.');
-//     }
-//   });
-
-
 
 // Start the Server
 app.listen(port, () => console.log(`Server running at http://localhost:${port}`));

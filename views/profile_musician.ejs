@@ -580,7 +580,7 @@
             <div class="followers">
               <div class="card">
                 <h5 class="card-title">Followers</h5>
-                <p id="followersCount" class="h4">5</p>
+                <p id="followersCount" class="h4"><%=user.followers %> </p>
                 <button id="followButton" class="btn btn-primary">Follow</button>
               </div>
             </div>
@@ -681,7 +681,7 @@
       </section>
 
     </div>
-    <div class="user_post" >
+    <div class="user_post" style="margin-top: 80px;">
       <section class="container my-4" >
         <h2 class="mb-4">User Posts</h2>
         <div class="row g-3">
@@ -690,8 +690,7 @@
             <div class="card">
               <video src="/uploads/videos/<%= user.video %>" controls></video>
               <div class="card-body">
-                <h5 class="card-title">Acoustic Vibes</h5>
-                <p class="card-text">A soothing new track with a mix of relaxing melodies and acoustic guitar.</p>
+                
               </div>
             </div>
           </div>

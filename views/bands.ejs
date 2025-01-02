@@ -44,11 +44,10 @@
                  alt="<%= band.name %>" class="img-thumbnail mr-3" style="width: 180px; height: 180px">
             <div style="padding-left: 30px;">
               <h5 class="mb-1"><%= band.name %></h5>
-              <p class="mb-1"><strong>Genre:</strong> <%= band.genre %></p>
-              <p class="mb-1"><strong>Members:</strong> <%= band.members %></p>
+              
               <p class="mb-1"><strong>Location:</strong> Bangalore</p>
               <p class="mb-1"><%= band.description || 'No description available.' %></p>
-              <a href="/band/<%= band.id %>" class="btn btn-primary mt-2">Go to Profile</a>
+              <a href="/band/<%= band.user_id %>" class="btn btn-primary mt-2">Go to Profile</a>
             </div>
           </div>
           <% }); %>
