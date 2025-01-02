@@ -110,6 +110,15 @@ app.use((req, res, next) => {
     }
 });
 
+
+
+
+
+
+
+
+
+
 // File Upload Configuration
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -226,6 +235,16 @@ app.get("/search", async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+
+
+
+
+
+
+
+
+
 
 app.get("/artists", (req, res) => {
     db.query("SELECT * FROM users WHERE role='musician'", (err, result) => {
