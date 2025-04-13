@@ -7,21 +7,11 @@ CREATE TABLE users (
     role VARCHAR(50) NOT NULL,            -- User role (e.g., musician, band_member, event_organizer)
     description TEXT,                     -- Additional description about the user
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- User creation timestamp
-);
-
--- Create the 'bands' table (if not already existing)
-CREATE TABLE bands (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,           -- Band name
-    description TEXT                      -- Band description
-);
-
--- Create the 'events' table (if not already existing)
-CREATE TABLE events (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,           -- Event name
-    description TEXT,                     -- Event description
-    date DATE                             -- Event date
+    profile_picture VARCHAR
+    video           VARCHAR
+    audio           VARCHAR
+    instrument      VARCHAR
+    videos          VARCHAR
 );
 
 -- Create a join table for users and bands (many-to-many)
@@ -57,6 +47,10 @@ CREATE TABLE bands (
   members INT
 );
 
+CREATE TABLE videos(
+  uploaded_by VARCHAR,
+  uploaded_at VARCHAR
+);
 
  obdknkztieqmttbk
 
